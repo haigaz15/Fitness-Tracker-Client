@@ -20,7 +20,7 @@ const ExerciseCard: React.FC<ExerciseCardProps> = function ({
   return (
     <Card>
       <CardMedia>
-        <CardMedia component="img" height={140} image="" alt={name} />
+        <CardMedia component="img" height={300} image={imageUrl} alt={name} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {name}
