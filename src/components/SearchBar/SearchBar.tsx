@@ -1,5 +1,3 @@
-const SearchBar = function (){
-
-}
+const SearchBar = function () {};
 
 export default SearchBar;

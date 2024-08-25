@@ -1,5 +1,3 @@
-const Home  = function(){
-
-}
+const Home = function () {};
 
 export default Home;

@@ -1,5 +1,3 @@
-const SelectDropdown = function (){
-
-}
+const SelectDropdown = function () {};
 
 export default SelectDropdown;

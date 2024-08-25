@@ -1,5 +1,3 @@
-const Button = function (){
-
-}
+const Button = function () {};
 
 export default Button;
