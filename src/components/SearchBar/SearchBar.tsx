@@ -1,8 +1,4 @@
-import {
-  IconButton,
-  InputBase,
-  Paper,
-} from "@mui/material";
+import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./SearchBar.css";
 
@@ -15,7 +11,7 @@ const SearchBar = function () {
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search  your exercise"
+          placeholder="Search"
           inputProps={{ "aria-label": "search google maps" }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">

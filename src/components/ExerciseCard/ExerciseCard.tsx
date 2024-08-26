@@ -6,8 +6,9 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import ExerciseModal from "../modal/ExerciseModal";
 
-interface ExerciseCardProps {
+export interface ExerciseCardProps {
   imageUrl: string;
   name: string;
   description: string;
@@ -17,8 +18,15 @@ const ExerciseCard: React.FC<ExerciseCardProps> = function ({
   name,
   description,
 }) {
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const handleExerciseModalClose = () => {
+    setOpenModal(false);
+  };
   return (
-    <Card>
+    <Card
+      sx={{ width: 400, padding: "8%", marginTop: "1%", marginLeft: "0.5%" }}
+    >
       <CardMedia>
         <CardMedia component="img" height={300} image={imageUrl} alt={name} />
         <CardContent>
@@ -30,7 +38,18 @@ const ExerciseCard: React.FC<ExerciseCardProps> = function ({
           </Typography>
         </CardContent>
       </CardMedia>
-      <Button size="small">Learn More</Button>
+      <Button size="small" onClick={() => setOpenModal(true)}>
+        Learn More
+      </Button>
+      <ExerciseModal
+        open={openModal}
+        handleClose={handleExerciseModalClose}
+        exerciseInfo={{
+          imageUrl: imageUrl,
+          name: name,
+          description: description,
+        }}
+      />
     </Card>
   );
 };
