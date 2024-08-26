@@ -25,19 +25,31 @@ const ExerciseCard: React.FC<ExerciseCardProps> = function ({
   };
   return (
     <Card
-      sx={{ width: 400, padding: "8%", marginTop: "1%", marginLeft: "0.5%" }}
+      sx={{
+        width: 300,
+        height: 400,
+        padding: "0 2% 2% 2%",
+        marginTop: "1%",
+        marginLeft: "2%",
+        marginRight: "2%",
+      }}
     >
-      <CardMedia>
-        <CardMedia component="img" height={300} image={imageUrl} alt={name} />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-      </CardMedia>
+      <CardMedia
+        component="img"
+        image={imageUrl}
+        alt={name}
+        sx={{ height: 200, objectFit: "contain" }}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {description.length > 150
+            ? description.slice(0, 150) + " ..."
+            : description}
+        </Typography>
+      </CardContent>
       <Button size="small" onClick={() => setOpenModal(true)}>
         Learn More
       </Button>
