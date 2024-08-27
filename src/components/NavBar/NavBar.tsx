@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import Navigations from "../../types/Navigations";
+import { toKebabCase } from "../../utils/stringManipulations";
+import { useNavigate } from "react-router-dom";
 const drawerWidth = 240;
 interface Props {
   navigations: Navigations[];
@@ -27,14 +29,22 @@ const NavBar = function (props: Props) {
     setIsClosing(false);
   };
 
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
-        {props.navigations.map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {props.navigations.map((text: string, index: number) => (
+          <ListItem key={toKebabCase(text)} disablePadding>
+            <ListItemButton
+              onClick={() => handleNavigation(`/${toKebabCase(text)}`)}
+            >
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>

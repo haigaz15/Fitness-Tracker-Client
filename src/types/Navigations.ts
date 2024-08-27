@@ -1,7 +1,7 @@
 enum Navigations {
-  PROFILE = "Profile",
+  HOME = "Home",
   EXERCISELIBRARY = "Exercise Library",
-  WORKOUTS = "Wrokouts",
+  WORKOUTS = "Workouts",
   ANALYTICS = "Analytics",
 }
 

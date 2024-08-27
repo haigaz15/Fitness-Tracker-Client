@@ -1,14 +1,14 @@
 import { Box, Toolbar, Typography } from "@mui/material";
 
-const Home = function () {
+const Analytics = () => {
   return (
-    <Box sx={{ color: "red" }}>
+    <Box>
       <Toolbar />
       <Typography variant="h1" color="text.secondary">
-        Welcome
+        Analytics
       </Typography>
     </Box>
   );
 };
 
-export default Home;
+export default Analytics;
