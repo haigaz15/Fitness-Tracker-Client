@@ -1,45 +1,28 @@
 import React from "react";
 import "./App.css";
-import Bar from "./components/AppBar/Bar";
-import NavBar from "./components/NavBar/NavBar";
-import Navigations from "./types/Navigations";
-import { Outlet } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import { ExerciseListType } from "./types/ExerciseListTypes";
-import genorateExercises from "./utils/generator";
+import { ExerciseListType } from "./types/exercise-types";
 import ExerciseList from "./pages/ExerciseList/ExerciseList";
 import Workout from "./pages/Workout/Workout";
 import Analytics from "./pages/Analytics/Analytics";
-
-function Layout() {
-  return (
-    <>
-      <Bar />
-      <div className="app-container">
-        <NavBar
-          navigations={[
-            Navigations.HOME,
-            Navigations.EXERCISELIBRARY,
-            Navigations.WORKOUTS,
-            Navigations.ANALYTICS,
-          ]}
-        />
-        <Outlet />
-      </div>
-    </>
-  );
-}
+import DashboardContainer from "./pages/Dashboard/DashboardContainer";
+import Home from "./pages/Home/Home";
+import UserProfile from "./pages/UserProfile/UserProfile";
+import useFetchExercises from "./hooks/useFetchExercises";
 
 function App() {
-  const exercises: ExerciseListType[] = genorateExercises();
+  const exercises: ExerciseListType[] | null = useFetchExercises();
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: <Home />,
+    },
+    {
+      path: "/user-profile",
+      element: <UserProfile />,
       children: [
-        { index: true, element: <Home /> },
-        { path: "home", element: <Home /> },
+        { index: true, element: <DashboardContainer /> },
+        { path: "dashboard", element: <DashboardContainer /> },
         {
           path: "exercise-library",
           element: <ExerciseList exercises={exercises} />,

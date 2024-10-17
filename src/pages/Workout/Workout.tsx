@@ -3,10 +3,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Grid,
-  List,
-  ListItem,
-  Paper,
+  CardMedia,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -16,7 +13,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 
-const workout = {
+const workouts = {
   workoutDate: "2024-08-27",
   exercises: [
     {
@@ -52,6 +49,30 @@ const workout = {
   ],
 };
 
+const workoutBoxStyle = {
+  padding: "8px 16px",
+  backgroundColor: "white",
+  color: "white",
+  borderRadius: "4px",
+  cursor: "pointer",
+  textAlign: "center",
+  boxShadow: 1,
+  "&:hover": {
+    backgroundColor: "#BBDEFB",
+    boxShadow: 2,
+  },
+  "&:active": {
+    backgroundColor: "#1565C0",
+    boxShadow: 0,
+  },
+  width: {
+    xs: "60%",
+    sm: "70%",
+    md: "80%",
+    lg: "90%",
+  },
+};
+
 const Workout = () => {
   return (
     <Box>
@@ -59,26 +80,40 @@ const Workout = () => {
       <Typography variant="h1" color="text.secondary">
         Workouts
       </Typography>
-      <div>
-        <Accordion>
+      <div style={{ marginLeft: "2%" }}>
+        <Accordion sx={{ width: "1000px" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography>Workout on {workout.workoutDate}</Typography>
+            <Typography>Workout on {workouts.workoutDate}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Stepper orientation="vertical">
-              {workout.exercises.map((item, index) => (
+              {workouts.exercises.map((item, index) => (
                 <Step key={index}>
-                  <StepLabel>{item.exercise.name}</StepLabel>
-                  <Typography variant="body2">
-                    Set: {item.set}, Reps: {item.reps}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {item.exercise.description}
-                  </Typography>
+                  <Box
+                    onClick={() => console.log("yello")}
+                    sx={{ width: "100%" }}
+                  >
+                    <Box sx={workoutBoxStyle}>
+                      <Box sx={{ display: "flex" }}>
+                        <StepLabel>{item.exercise.name}</StepLabel>
+                        <CardMedia
+                          component="img"
+                          height="110"
+                          image={
+                            "https://www.shutterstock.com/image-illustration/closegrip-barbell-bench-press-3d-600nw-430936051.jpg"
+                          }
+                          alt={item.exercise.name}
+                        />
+                      </Box>
+                      <Typography variant="body2" color="black">
+                        Set: {item.set}, Reps: {item.reps}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Step>
               ))}
             </Stepper>

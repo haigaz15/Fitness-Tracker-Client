@@ -19,7 +19,6 @@ interface Props {
 const NavBar = function (props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [, setIsClosing] = React.useState(false);
-
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -43,7 +42,7 @@ const NavBar = function (props: Props) {
         {props.navigations.map((text: string, index: number) => (
           <ListItem key={toKebabCase(text)} disablePadding>
             <ListItemButton
-              onClick={() => handleNavigation(`/${toKebabCase(text)}`)}
+              onClick={() => handleNavigation(`${toKebabCase(text)}`)}
             >
               <ListItemText primary={text} />
             </ListItemButton>

@@ -14,18 +14,19 @@ import AdbIcon from "@mui/icons-material/Adb";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["User Profile"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-const Bar = function () {
+const Bar: React.FC = function () {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-
+  const navigate = useNavigate();
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -35,10 +36,14 @@ const Bar = function () {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+    navigate("/user-profile");
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+  const HandleHomeClicked = () => {
+    navigate("/");
   };
   return (
     <AppBar
@@ -52,7 +57,7 @@ const Bar = function () {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -62,8 +67,9 @@ const Bar = function () {
               color: "inherit",
               textDecoration: "none",
             }}
+            onClick={HandleHomeClicked}
           >
-            LOGO
+            Home
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

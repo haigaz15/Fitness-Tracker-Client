@@ -1,4 +1,4 @@
-import { ExerciseListType } from "../types/ExerciseListTypes";
+import { ExerciseListType } from "../types/exercise-types";
 
 function genorateExercises(): ExerciseListType[] {
   const exercises: ExerciseListType[] = [];

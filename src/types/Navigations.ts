@@ -1,5 +1,5 @@
 enum Navigations {
-  HOME = "Home",
+  DASHBOARD = "Dashboard",
   EXERCISELIBRARY = "Exercise Library",
   WORKOUTS = "Workouts",
   ANALYTICS = "Analytics",
