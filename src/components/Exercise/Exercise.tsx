@@ -119,9 +119,12 @@ const Exercise: React.FC<ExerciseCardProps> = function ({
           <ExerciseContent name={name} description={description} />
         )}
         cardEndLayout={() => (
-          <Button size="small" onClick={() => setOpenModal(true)}>
-            Learn More
-          </Button>
+          <Box>
+            <Button size="small" onClick={() => setOpenModal(true)}>
+              Learn More
+            </Button>
+            <Button size="small">Add to Workout</Button>
+          </Box>
         )}
       />
 

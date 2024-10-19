@@ -27,7 +27,7 @@ const TabBar: React.FC<TapBarExerciseListProps> = ({
       >
         <Tab label="Barbell" value="barbell" />
         <Tab label="Dumbbell" value="dumbbell" />
-        <Tab label="Kettlebell" value="kettlebell" />
+        <Tab label="Kettlebell" value="kettle" />
         <Tab label="Bodyweight" value="bodyweight" />
         <SearchBar />
       </Tabs>
