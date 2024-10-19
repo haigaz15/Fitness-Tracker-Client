@@ -1,7 +1,12 @@
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
+import { PaginationProp } from "../../types/pagination-type";
 
-const Pagination: React.FC<{ currentPage: number }> = ({ currentPage }) => {
+const Pagination: React.FC<PaginationProp> = ({
+  currentPage,
+  handleNextPage,
+  handlePreviousPage,
+}) => {
   return (
     <Box
       sx={{
@@ -18,6 +23,7 @@ const Pagination: React.FC<{ currentPage: number }> = ({ currentPage }) => {
       }}
     >
       <Button
+        onClick={handlePreviousPage}
         startIcon={<ArrowBack />}
         sx={{ color: "primary.main", textTransform: "none" }} // Disable uppercase transformation
       >
@@ -35,11 +41,12 @@ const Pagination: React.FC<{ currentPage: number }> = ({ currentPage }) => {
         }}
       >
         <Typography variant="body2" sx={{ color: "white" }}>
-          {currentPage} {/* Current page number */}
+          {currentPage + 1} {/* Current page number */}
         </Typography>
       </Box>
 
       <Button
+        onClick={handleNextPage}
         endIcon={<ArrowForward />}
         sx={{ color: "primary.main", textTransform: "none" }} // Disable uppercase transformation
       >

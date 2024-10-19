@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Exercise from "../../components/Exercise/Exercise";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import TabBar from "../../components/TabBar/TabBar";
@@ -10,14 +10,30 @@ import { Box } from "@mui/material";
 
 const ExerciseList: React.FC<any> = observer(() => {
   const [tabValue, setTabValue] = useState<string>("barbell");
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const { exerciseStore } = useStore();
+
+  useEffect(() => {
+    exerciseStore.setExerciseList(tabValue, currentPage * 6);
+  }, [exerciseStore, tabValue, currentPage]);
 
   const handleTabValueChange = (
     e: React.SyntheticEvent,
     newValue: string
   ): void => {
     setTabValue(newValue);
-    exerciseStore.setExerciseList(newValue);
+    setCurrentPage(0);
+  };
+
+  const handleNextPage = (event: React.SyntheticEvent) => {
+    setCurrentPage((currentVal) => (currentVal += 1));
+  };
+
+  const handlePreviousPage = (event: React.SyntheticEvent) => {
+    setCurrentPage((currentVal) => {
+      if (currentVal === 0) return 0;
+      return (currentVal -= 1);
+    });
   };
 
   return (
@@ -42,7 +58,11 @@ const ExerciseList: React.FC<any> = observer(() => {
             />
           ))}
       </Box>
-      <Pagination currentPage={1} />
+      <Pagination
+        currentPage={currentPage}
+        handleNextPage={handleNextPage}
+        handlePreviousPage={handlePreviousPage}
+      />
     </div>
   );
 });

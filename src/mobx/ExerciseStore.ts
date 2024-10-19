@@ -24,10 +24,13 @@ export class ExerciseStore {
     }
   };
 
-  setExerciseList = async (value: string): Promise<void> => {
+  setExerciseList = async (value: string, skip: number): Promise<void> => {
     this.loading = true;
     try {
-      this.exerciseList = await exerciseAPIInstance.getExercisesByType(value);
+      this.exerciseList = await exerciseAPIInstance.getExercisesByType(
+        value,
+        skip
+      );
       this.error = null;
     } catch (err) {
       this.error = "failed to load exercise!";
