@@ -1,24 +1,12 @@
-import React from "react";
-import { Typography, Button, Box, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Box } from "@mui/material";
 import { ExerciseCardProps } from "../../types/exercise-types";
 import ExCard from "../Card/ExCard";
 import ExModal from "../modal/ExModal";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import ExerciseContent from "./ExerciseContent";
+import ExerciseModal from "./ExerciseModal";
+import AddWorkoutForm from "../AddWorkoutForm/AddWorkoutForm";
 
-const childStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  height: 700,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-  overflowY: "auto",
-};
 const parentStyle = {
   width: 300,
   height: 400,
@@ -27,81 +15,16 @@ const parentStyle = {
   marginLeft: "2%",
   marginRight: "2%",
 };
-const ExerciseContent: React.FC<ExerciseCardProps> = ({
-  name,
-  description,
-}) => {
-  return (
-    <>
-      <Typography gutterBottom variant="h5" component="div">
-        {name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {description.length > 150
-          ? description.slice(0, 150) + " ..."
-          : description}
-      </Typography>
-    </>
-  );
-};
-const ExerciseModalCardContent: React.FC<ExerciseCardProps> = ({
-  name,
-  description,
-}) => {
-  return (
-    <>
-      <Typography gutterBottom variant="h5" component="div">
-        {name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {description}
-      </Typography>
-    </>
-  );
-};
-const ExerciseModal: React.FC<ExerciseCardProps> = ({
-  imageUrl,
-  name,
-  description,
-}) => {
-  return (
-    <>
-      <ExCard
-        cardStyle={childStyle}
-        cardContentStyle={{ overflowY: "auto", maxHeight: "50vh" }}
-        cardMediaStyle={{
-          component: "img",
-          height: 400,
-          image: imageUrl,
-          name: name,
-        }}
-        cardContentLayout={() => (
-          <ExerciseModalCardContent name={name} description={description} />
-        )}
-        cardEndLayout={() => (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            {" "}
-            <IconButton>
-              <ArrowBack />
-            </IconButton>
-            <IconButton>
-              <ArrowForward />
-            </IconButton>
-          </Box>
-        )}
-      />
-    </>
-  );
-};
+
 const Exercise: React.FC<ExerciseCardProps> = function ({
   imageUrl,
   name,
   description,
 }) {
-  const [openModal, setOpenModal] = React.useState(false);
-
+  const [openExerciseModal, setOpenExerciseModal] = useState(false);
+  const [openAddWorkoutModal, setAddWorkoutModal] = useState(false);
   const handleExerciseModalClose = () => {
-    setOpenModal(false);
+    setOpenExerciseModal(false);
   };
 
   return (
@@ -120,16 +43,18 @@ const Exercise: React.FC<ExerciseCardProps> = function ({
         )}
         cardEndLayout={() => (
           <Box>
-            <Button size="small" onClick={() => setOpenModal(true)}>
+            <Button size="small" onClick={() => setOpenExerciseModal(true)}>
               Learn More
             </Button>
-            <Button size="small">Add to Workout</Button>
+            <Button size="small" onClick={() => setAddWorkoutModal(true)}>
+              Add to Workout
+            </Button>
           </Box>
         )}
       />
 
       <ExModal
-        open={openModal}
+        open={openExerciseModal}
         handleClose={handleExerciseModalClose}
         renderModalContent={() => (
           <ExerciseModal
@@ -138,6 +63,12 @@ const Exercise: React.FC<ExerciseCardProps> = function ({
             name={name}
           />
         )}
+      />
+
+      <ExModal
+        open={openAddWorkoutModal}
+        handleClose={() => setAddWorkoutModal(false)}
+        renderModalContent={() => <AddWorkoutForm choosenExercise={name} />}
       />
     </>
   );

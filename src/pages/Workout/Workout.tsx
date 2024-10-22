@@ -13,7 +13,8 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 
-const workouts = {
+export const workouts = {
+  name: "chest and beiceps",
   workoutDate: "2024-08-27",
   exercises: [
     {
