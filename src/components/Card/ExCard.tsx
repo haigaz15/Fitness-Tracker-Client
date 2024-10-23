@@ -12,7 +12,7 @@ const ExCard: React.FC<ExCardProps> = ({
     <Card sx={cardStyle}>
       <CardMedia {...cardMediaStyle} />
       <CardContent {...cardContentStyle}>{cardContentLayout()}</CardContent>
-      {cardEndLayout()}
+      {cardEndLayout && cardEndLayout()}
     </Card>
   );
 };

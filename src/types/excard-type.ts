@@ -3,5 +3,5 @@ export interface ExCardProps {
   cardContentStyle: { [key: string]: any };
   cardMediaStyle: { [key: string]: any };
   cardContentLayout: () => React.ReactNode;
-  cardEndLayout: () => React.ReactNode;
+  cardEndLayout?: () => React.ReactNode;
 }

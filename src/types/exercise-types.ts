@@ -14,3 +14,11 @@ export interface ExerciseModalProps {
   handleClose: () => void;
   renderModalContent: () => React.ReactElement;
 }
+
+export interface ExerciseOnWorkout {
+  name: string;
+  set: number;
+  reps: string;
+  rest: string;
+  weight: string;
+}

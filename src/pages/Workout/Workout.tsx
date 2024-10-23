@@ -3,52 +3,18 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  CardMedia,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-
-export const workouts = {
-  name: "chest and beiceps",
-  workoutDate: "2024-08-27",
-  exercises: [
-    {
-      exercise: {
-        name: "Barbell Curl",
-        type: "barbell",
-        description:
-          "Holds the bar with underhand grip slightly wider than shoulder width. Curl the barbell up until fully contacted motion then lower the barbell to the starting point.",
-      },
-      set: 4,
-      reps: "12-4-6-8",
-    },
-    {
-      exercise: {
-        name: "Dumbbell Press",
-        type: "dumbbell",
-        description:
-          "Press the dumbbells upwards while sitting on a bench with your back straight.",
-      },
-      set: 3,
-      reps: "10-8-6",
-    },
-    {
-      exercise: {
-        name: "Deadlift",
-        type: "barbell",
-        description:
-          "Lift the barbell from the ground to thigh level while keeping your back straight.",
-      },
-      set: 3,
-      reps: "8-6-4",
-    },
-  ],
-};
+import WorkoutSummary from "../../components/Workout/WorkoutSummary";
+import WorkoutHead from "../../components/Workout/WorkoutHead";
+import { useStore } from "../../hooks/userStore";
+import ExCard from "../../components/Card/ExCard";
+import WorkoutExerciseCardContent from "../../components/Workout/WorkoutExerciseCardContent";
 
 const workoutBoxStyle = {
   padding: "8px 16px",
@@ -75,52 +41,69 @@ const workoutBoxStyle = {
 };
 
 const Workout = () => {
+  const { workoutStore } = useStore();
   return (
     <Box>
       <Toolbar />
-      <Typography variant="h1" color="text.secondary">
-        Workouts
-      </Typography>
-      <div style={{ marginLeft: "2%" }}>
-        <Accordion sx={{ width: "1000px" }}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography>Workout on {workouts.workoutDate}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stepper orientation="vertical">
-              {workouts.exercises.map((item, index) => (
-                <Step key={index}>
-                  <Box
-                    onClick={() => console.log("yello")}
-                    sx={{ width: "100%" }}
-                  >
-                    <Box sx={workoutBoxStyle}>
-                      <Box sx={{ display: "flex" }}>
-                        <StepLabel>{item.exercise.name}</StepLabel>
-                        <CardMedia
-                          component="img"
-                          height="110"
-                          image={
-                            "https://www.shutterstock.com/image-illustration/closegrip-barbell-bench-press-3d-600nw-430936051.jpg"
-                          }
-                          alt={item.exercise.name}
-                        />
+      <WorkoutHead />
+      {workoutStore.workoutSessions.map((workout) => (
+        <Box style={{ marginLeft: "2%" }}>
+          <Accordion sx={{ width: "1000px", padding: 2 }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <WorkoutSummary workout={workout} />
+            </AccordionSummary>
+            <AccordionDetails>
+              <Stepper orientation="vertical">
+                {workout.exercises.map((exercise, index) => (
+                  <Step key={index}>
+                    <Box
+                      onClick={() => console.log("yello")}
+                      sx={{ width: "100%" }}
+                    >
+                      <Box sx={workoutBoxStyle}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <StepLabel>{exercise.name}</StepLabel>
+                          <ExCard
+                            cardStyle={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                            cardContentStyle={{ flex: "1 0 auto" }}
+                            cardMediaStyle={{
+                              component: "img",
+                              image:
+                                "https://weighttraining.guide/wp-content/uploads/2016/10/dumbbell-shrug-resized.png",
+                              name: exercise.name,
+                              sx: {
+                                height: 200,
+                                objectFit: "contain",
+                                width: 400, // Adjust width to fit your layout
+                                flexShrink: 0, // Prevent the image from shrinking
+                              },
+                            }}
+                            cardContentLayout={() => (
+                              <WorkoutExerciseCardContent exercise={exercise} />
+                            )}
+                          />
+                        </Box>
                       </Box>
-                      <Typography variant="body2" color="black">
-                        Set: {item.set}, Reps: {item.reps}
-                      </Typography>
                     </Box>
-                  </Box>
-                </Step>
-              ))}
-            </Stepper>
-          </AccordionDetails>
-        </Accordion>
-      </div>
+                  </Step>
+                ))}
+              </Stepper>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+      ))}
     </Box>
   );
 };

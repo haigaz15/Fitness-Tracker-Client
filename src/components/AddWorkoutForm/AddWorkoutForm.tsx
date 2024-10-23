@@ -11,15 +11,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { workouts } from "../../pages/Workout/Workout";
 import { useEffect, useRef, useState } from "react";
 import AddWorkoutVolumeButton from "../Button/AddWorkoutVolumeButton";
 import RemoveWorkoutVolumeButton from "../Button/RemoveWorkoutVolumeButton";
 import SaveButton from "../Button/SaveButton";
 import CancelButton from "../Button/CancelButton";
+import { useStore } from "../../hooks/userStore";
 
 const AddWorkoutList = () => {
-  return [workouts].map((workout) => (
+  const { workoutStore } = useStore();
+  return workoutStore.workoutSessions.map((workout) => (
     <MenuItem key={workout.workoutDate} value={workout.name}>
       {workout.name}
     </MenuItem>

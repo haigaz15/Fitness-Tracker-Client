@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { ExerciseListType } from "../types/exercise-types";
-import exerciseAPIInstance from "../services/ExerciseAPI";
+import exerciseAPIServiceInstance from "../services/ExerciseAPIService";
 
 export class ExerciseStore {
   exerciseList: ExerciseListType[] = [];
@@ -15,7 +15,7 @@ export class ExerciseStore {
   initializeExercises = async (): Promise<void> => {
     this.loading = true;
     try {
-      this.exerciseList = await exerciseAPIInstance.getExercisesByType();
+      this.exerciseList = await exerciseAPIServiceInstance.getExercisesByType();
       this.error = null;
     } catch (err) {
       this.error = "failed to load exercise!";
@@ -27,7 +27,7 @@ export class ExerciseStore {
   setExerciseList = async (value: string, skip: number): Promise<void> => {
     this.loading = true;
     try {
-      this.exerciseList = await exerciseAPIInstance.getExercisesByType(
+      this.exerciseList = await exerciseAPIServiceInstance.getExercisesByType(
         value,
         skip
       );

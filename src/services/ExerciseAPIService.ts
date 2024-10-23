@@ -2,7 +2,7 @@ import axios from "axios";
 import { EXERCISEURL } from "../types/url-enums";
 import { ExerciseListType } from "../types/exercise-types";
 
-class ExerciseAPI {
+class ExerciseAPIService {
   async getExercisesByType(
     type: string = "barbell",
     skip: number = 0,
@@ -15,5 +15,5 @@ class ExerciseAPI {
     return exerciseList;
   }
 }
-const exerciseAPIInstance = new ExerciseAPI();
-export default exerciseAPIInstance;
+const exerciseAPIServiceInstance = new ExerciseAPIService();
+export default exerciseAPIServiceInstance;
