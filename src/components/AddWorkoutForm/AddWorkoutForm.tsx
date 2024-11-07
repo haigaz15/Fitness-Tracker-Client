@@ -1,22 +1,17 @@
-import {
-  Box,
-  MenuItem,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, MenuItem, TextField, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import AddWorkoutVolumeButton from "../Button/AddWorkoutVolumeButton";
 import RemoveWorkoutVolumeButton from "../Button/RemoveWorkoutVolumeButton";
 import SaveButton from "../Button/SaveButton";
 import CancelButton from "../Button/CancelButton";
 import { useStore } from "../../hooks/userStore";
+import ExerciseVolumeAdder from "../Exercise/ExerciseVolumeAdder";
+import { ExerciseVolume } from "../../types/exercise-types";
+import {
+  handleRepsChange,
+  handleRestChange,
+  handleWeightChange,
+} from "../../utils/handlers";
 
 const AddWorkoutList = () => {
   const { workoutStore } = useStore();
@@ -26,30 +21,28 @@ const AddWorkoutList = () => {
     </MenuItem>
   ));
 };
-interface WorkoutVolume {
-  set: string;
-  rep: string;
-}
+
 const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
   choosenExercise,
 }) => {
-  const [workoutVolumes, setWorkoutVolumes] = useState<WorkoutVolume[]>(
-    [] as WorkoutVolume[]
-  );
+  const [exerciseVolumes, setExerciseVolumes] = useState<ExerciseVolume[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const handleWorkoutVolumeAdition = () => {
-    const newWorkoutVolume = [...workoutVolumes, { set: "", rep: "" }];
-    setWorkoutVolumes(newWorkoutVolume);
+    const newExerciseVolume = [
+      ...exerciseVolumes,
+      { set: "", reps: "", rest: "", weight: "" },
+    ];
+    setExerciseVolumes(newExerciseVolume);
   };
   const handleWorkoutVolumeRemoval = () => {
-    setWorkoutVolumes(workoutVolumes.slice(0, workoutVolumes.length - 1));
+    setExerciseVolumes(exerciseVolumes.slice(0, exerciseVolumes.length - 1));
   };
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [workoutVolumes]);
+  }, [exerciseVolumes]);
   return (
     <Box
       component="form"
@@ -127,109 +120,13 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
           handleWorkoutVolume={handleWorkoutVolumeRemoval}
         />
       </span>
-      <TableContainer
-        component={Paper}
-        sx={{ marginTop: 2, maxHeight: "320px" }}
-        ref={containerRef}
-      >
-        <Table size="small">
-          <TableHead>
-            <TableRow sx={{ borderBottom: "none" }}>
-              <TableCell
-                sx={{
-                  padding: "4px 8px",
-                  fontSize: "0.9rem",
-                  borderBottom: "none",
-                }}
-              >
-                <b>Sets</b>
-              </TableCell>
-              <TableCell
-                sx={{
-                  padding: "4px 8px",
-                  fontSize: "0.9rem",
-                  borderBottom: "none",
-                }}
-              >
-                <b>Reps</b>
-              </TableCell>
-              <TableCell
-                sx={{
-                  padding: "4px 8px",
-                  fontSize: "0.9rem",
-                  borderBottom: "none",
-                }}
-              >
-                <b>Rest (SEC) </b>
-              </TableCell>
-              <TableCell
-                sx={{
-                  padding: "4px 8px",
-                  fontSize: "0.9rem",
-                  borderBottom: "none",
-                }}
-              >
-                <b>Weight (KG) </b>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {workoutVolumes &&
-              workoutVolumes.length !== 0 &&
-              workoutVolumes.map((workoutVolume, index) => {
-                return (
-                  <TableRow key={index} sx={{ borderBottom: "none" }}>
-                    <TableCell
-                      sx={{ padding: "4px 8px", borderBottom: "none" }}
-                    >
-                      <Typography>{index + 1}</Typography>
-                    </TableCell>
-                    <TableCell
-                      sx={{ padding: "4px 8px", borderBottom: "none" }}
-                    >
-                      <TextField
-                        type="number"
-                        name="reps"
-                        defaultValue={workoutVolume.rep}
-                        InputProps={{ inputProps: { min: 0 } }}
-                        sx={{
-                          width: 80,
-                          "& .MuiInputBase-root": { height: "40px" },
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      sx={{ padding: "4px 8px", borderBottom: "none" }}
-                    >
-                      <TextField
-                        name="rest"
-                        defaultValue={workoutVolume.rep}
-                        InputProps={{ inputProps: { min: 0 } }}
-                        sx={{
-                          width: 80,
-                          "& .MuiInputBase-root": { height: "40px" },
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      sx={{ padding: "4px 8px", borderBottom: "none" }}
-                    >
-                      <TextField
-                        name="rest"
-                        defaultValue={workoutVolume.rep}
-                        InputProps={{ inputProps: { min: 0 } }}
-                        sx={{
-                          width: 80,
-                          "& .MuiInputBase-root": { height: "40px" },
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <ExerciseVolumeAdder
+        exerciseVolumes={exerciseVolumes}
+        containerRef={containerRef}
+        handleRepsChange={handleRepsChange}
+        handleRestChange={handleRestChange}
+        handleWeightChange={handleWeightChange}
+      />
       <span>
         <Box
           sx={{
@@ -240,7 +137,11 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
             width: "294px",
           }}
         >
-          <SaveButton handleClick={() => console.log("saved")} />
+          <SaveButton
+            handleClick={() => console.log("saved")}
+            style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}
+            buttonTitle="save"
+          />
         </Box>
         <Box
           sx={{
@@ -251,7 +152,11 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
             width: "294px",
           }}
         >
-          <CancelButton handleClick={() => console.log("canceled")} />
+          <CancelButton
+            handleClick={() => console.log("canceled")}
+            style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}
+            buttonTitle="Cancel"
+          />
         </Box>
       </span>
     </Box>

@@ -65,7 +65,10 @@ const NavBar = function (props: Props) {
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{
+        width: { sm: drawerWidth },
+        flexShrink: { sm: 0 },
+      }}
       aria-label="mailbox folders"
     >
       <Drawer

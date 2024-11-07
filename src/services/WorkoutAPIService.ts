@@ -7,7 +7,7 @@ class WorkoutAPIService {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/${WORKOUTURL.GET_WORKOUTWITHEXERCISE}`
     );
-    return response.data as WorkoutSession[];
+    return (await response.data) as WorkoutSession[];
   }
 }
 

@@ -12,7 +12,7 @@ export class WorkoutStore {
     this.initializeWorkoutSessions();
   }
 
-  async initializeWorkoutSessions() {
+  initializeWorkoutSessions = async (): Promise<void> => {
     this.loading = true;
     try {
       this.workoutSessions =
@@ -23,5 +23,5 @@ export class WorkoutStore {
     } finally {
       this.loading = false;
     }
-  }
+  };
 }

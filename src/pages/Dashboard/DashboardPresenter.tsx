@@ -1,15 +1,21 @@
 const mainDivStyle = {
   display: "flex",
   marginTop: "80px",
-  width: "300px",
+  width: "100%",
 };
 const firstCDivStyle = {
-  flex: 1,
+  flex: 4,
 };
 
 const secondCDivStyle = {
-  flex: 20,
-  backgroundColor: "red",
+  flex: 18,
+  height: "100vh",
+};
+const horizontalLineStyle = {
+  width: "11px",
+  margin: "0 -5px",
+  borderLeft: "1px solid rgba(255, 255, 255, 0)",
+  cursor: "col-resize",
 };
 const DashbaordPresenter: React.FC<{ children: React.ReactNode[] }> = ({
   children,
@@ -18,6 +24,7 @@ const DashbaordPresenter: React.FC<{ children: React.ReactNode[] }> = ({
   return (
     <div style={mainDivStyle}>
       <div style={firstCDivStyle}>{left}</div>
+      <span style={horizontalLineStyle}></span>
       <div style={secondCDivStyle}>{right}</div>
     </div>
   );

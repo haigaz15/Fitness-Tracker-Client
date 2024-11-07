@@ -1,18 +1,21 @@
 import { Button } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-interface SaveButtonProps {
-  handleClick: () => void;
-}
-const SaveButton: React.FC<SaveButtonProps> = ({ handleClick }) => {
+import { ButtonProps } from "../../types/button-type";
+
+const SaveButton: React.FC<ButtonProps> = ({
+  handleClick,
+  style,
+  buttonTitle,
+}) => {
   return (
     <Button
       variant="contained"
       color="primary"
       startIcon={<SaveIcon />}
       onClick={handleClick}
-      style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}
+      sx={style}
     >
-      Save
+      {buttonTitle}
     </Button>
   );
 };

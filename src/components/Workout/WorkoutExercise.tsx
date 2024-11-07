@@ -12,9 +12,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 import Divider from "@mui/material/Divider";
 
-const WorkoutExercise: React.FC<{ exercise: ExerciseOnWorkout }> = ({
-  exercise,
-}) => {
+const WorkoutExercise: React.FC<{
+  exercise: ExerciseOnWorkout;
+  hasExpantion: boolean;
+}> = ({ exercise, hasExpantion }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const array = new Array(exercise.set).fill(exercise.set);
   return (
@@ -24,6 +25,7 @@ const WorkoutExercise: React.FC<{ exercise: ExerciseOnWorkout }> = ({
         transition: "height 0.3s ease",
         marginTop: 2,
         padding: 1,
+        marginBottom: 2,
       }}
     >
       <Box
@@ -78,68 +80,72 @@ const WorkoutExercise: React.FC<{ exercise: ExerciseOnWorkout }> = ({
                 sx={{ width: "300px" }}
                 align="left"
               >
-                weight {exercise.weight}-140
+                weight {exercise.weight}
               </Typography>
             </Box>
           </Box>
         </Box>
-        <IconButton
-          size="small"
-          sx={{
-            "&:hover": {
-              backgroundColor: "inherit", // Prevent background color change on hover
-            },
-          }}
-          onClick={() => setExpanded((prev) => !prev)}
-        >
-          <ExpandMoreIcon
+        {hasExpantion && (
+          <IconButton
+            size="small"
             sx={{
-              transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 0.3s",
+              "&:hover": {
+                backgroundColor: "inherit", // Prevent background color change on hover
+              },
             }}
-          />
-        </IconButton>
-      </Box>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Divider sx={{ marginTop: "1%" }} />
-        <Box sx={{ marginTop: "1%" }}>
-          <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-            <Typography variant="body2" sx={{ width: "80px" }}>
-              Set
-            </Typography>
-            <Typography variant="body2" sx={{ width: "80px" }}>
-              Reps
-            </Typography>
-            <Typography variant="body2" align="left" sx={{ width: "80px" }}>
-              Rest(SEC)
-            </Typography>
-            <Typography variant="body2" align="left" sx={{ width: "80px" }}>
-              Weight(KG)
-            </Typography>
-          </Box>
-        </Box>
-        {array.map((_, index) => {
-          return (
-            <Box
-              key={index}
+            onClick={() => setExpanded((prev) => !prev)}
+          >
+            <ExpandMoreIcon
               sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                marginTop: "1%",
+                transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+                transition: "transform 0.3s",
               }}
-            >
-              <TextField
-                size="small"
-                sx={{ width: "80px" }}
-                value={index + 1}
-              />
-              <TextField size="small" sx={{ width: "80px" }} value={""} />
-              <TextField size="small" sx={{ width: "80px" }} value={""} />
-              <TextField size="small" sx={{ width: "80px" }} value={""} />
+            />
+          </IconButton>
+        )}
+      </Box>
+      {hasExpantion && (
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Divider sx={{ marginTop: "1%" }} />
+          <Box sx={{ marginTop: "1%" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+              <Typography variant="body2" sx={{ width: "80px" }}>
+                Set
+              </Typography>
+              <Typography variant="body2" sx={{ width: "80px" }}>
+                Reps
+              </Typography>
+              <Typography variant="body2" align="left" sx={{ width: "80px" }}>
+                Rest(SEC)
+              </Typography>
+              <Typography variant="body2" align="left" sx={{ width: "80px" }}>
+                Weight(KG)
+              </Typography>
             </Box>
-          );
-        })}
-      </Collapse>
+          </Box>
+          {array.map((_, index) => {
+            return (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "1%",
+                }}
+              >
+                <TextField
+                  size="small"
+                  sx={{ width: "80px" }}
+                  value={index + 1}
+                />
+                <TextField size="small" sx={{ width: "80px" }} value={""} />
+                <TextField size="small" sx={{ width: "80px" }} value={""} />
+                <TextField size="small" sx={{ width: "80px" }} value={""} />
+              </Box>
+            );
+          })}
+        </Collapse>
+      )}
     </Paper>
   );
 };
