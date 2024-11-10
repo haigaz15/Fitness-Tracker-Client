@@ -3,7 +3,7 @@ import { WorkoutPresenterProps } from "../../types/workout-type";
 
 const WorkoutPresenter: React.FC<WorkoutPresenterProps> = ({
   renderWorkoutList,
-  renderWorkoutEx,
+  renderWorkoutListItem,
   mainStyle,
   workoutListStyle,
   workoutExStyle,
@@ -12,7 +12,7 @@ const WorkoutPresenter: React.FC<WorkoutPresenterProps> = ({
     <Box sx={mainStyle}>
       <Box sx={workoutListStyle}>{renderWorkoutList()}</Box>
       <Divider orientation="vertical" flexItem sx={{ cursor: "col-resize" }} />
-      <Box sx={workoutExStyle}>{renderWorkoutEx()}</Box>
+      <Box sx={workoutExStyle}>{renderWorkoutListItem()}</Box>
     </Box>
   );
 };

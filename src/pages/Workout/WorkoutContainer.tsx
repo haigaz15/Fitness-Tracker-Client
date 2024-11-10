@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import exerciseAPIServiceInstance from "../../services/ExerciseAPIService";
 import { ExerciseListType } from "../../types/exercise-types";
 import { detectAndReturnUniqueExerciseLists } from "../../utils/helper";
+import { Outlet } from "react-router-dom";
 
 const mainStyle = {
   display: "flex",
@@ -26,6 +27,9 @@ const WorkoutContainer = () => {
   const [exercises, setExercises] = useState<ExerciseListType[]>([]);
   const [loadingExercises, setLoadingExercises] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+  const [workoutCreator, setWorkoutCreator] = useState(true);
+
+  const handleSaveWorkout = () => {};
 
   const autocompleteRefCall = useCallback(
     (node: HTMLDivElement | null) => {
@@ -77,16 +81,22 @@ const WorkoutContainer = () => {
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <WorkoutPresenter
-        renderWorkoutList={() => <WorkoutList />}
-        renderWorkoutEx={() => (
-          <WorkoutEx
-            exercsies={exercises}
-            autoCompleteOpen={autoCompleteOpen}
-            setAutoCompleteOpen={setAutoCompleteOpen}
-            autocompleteRefCall={autocompleteRefCall}
-            loadingExercises={loadingExercises}
-          />
+        renderWorkoutList={() => (
+          <WorkoutList setWorkoutCreator={setWorkoutCreator} />
         )}
+        renderWorkoutListItem={() =>
+          workoutCreator ? (
+            <WorkoutEx
+              exercises={exercises}
+              autoCompleteOpen={autoCompleteOpen}
+              setAutoCompleteOpen={setAutoCompleteOpen}
+              autocompleteRefCall={autocompleteRefCall}
+              loadingExercises={loadingExercises}
+            />
+          ) : (
+            <Outlet />
+          )
+        }
         mainStyle={mainStyle}
         workoutListStyle={workoutListStyle}
         workoutExStyle={workoutExStyle}

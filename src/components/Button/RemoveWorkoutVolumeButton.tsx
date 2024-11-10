@@ -2,9 +2,11 @@ import { Button } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 interface RemoveWorkoutVolumeButtonProps {
   handleWorkoutVolume: () => void;
+  style: { [key: string]: any };
 }
 const RemoveWorkoutVolumeButton: React.FC<RemoveWorkoutVolumeButtonProps> = ({
   handleWorkoutVolume,
+  style,
 }) => {
   return (
     <Button
@@ -12,7 +14,7 @@ const RemoveWorkoutVolumeButton: React.FC<RemoveWorkoutVolumeButtonProps> = ({
       color="primary"
       startIcon={<RemoveIcon />}
       onClick={handleWorkoutVolume}
-      style={{ borderRadius: "8px", padding: "10px 20px", width: "49%" }}
+      sx={style}
     >
       Remove Set
     </Button>

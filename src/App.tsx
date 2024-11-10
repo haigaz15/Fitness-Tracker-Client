@@ -7,6 +7,7 @@ import DashboardContainer from "./pages/Dashboard/DashboardContainer";
 import Home from "./pages/Home/Home";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import WorkoutContainer from "./pages/Workout/WorkoutContainer";
+import WorkoutListItems from "./components/Workout/WorkoutListItems";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,7 +25,11 @@ function App() {
           path: "exercise-library",
           element: <ExerciseList />,
         },
-        { path: "workouts", element: <WorkoutContainer /> },
+        {
+          path: "workouts",
+          element: <WorkoutContainer />,
+          children: [{ path: "chest", element: <WorkoutListItems /> }],
+        },
         { path: "analytics", element: <Analytics /> },
       ],
     },

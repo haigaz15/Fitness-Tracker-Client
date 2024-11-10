@@ -2,9 +2,11 @@ import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 interface AddWorkoutVolumeButtonProps {
   handleWorkoutVolume: () => void;
+  style: { [key: string]: any };
 }
 const AddWorkoutVolumeButton: React.FC<AddWorkoutVolumeButtonProps> = ({
   handleWorkoutVolume,
+  style,
 }) => {
   return (
     <Button
@@ -12,7 +14,7 @@ const AddWorkoutVolumeButton: React.FC<AddWorkoutVolumeButtonProps> = ({
       color="primary"
       startIcon={<AddIcon />}
       onClick={handleWorkoutVolume}
-      style={{ borderRadius: "8px", padding: "10px 20px", width: "49%" }}
+      style={style}
     >
       Add Set
     </Button>

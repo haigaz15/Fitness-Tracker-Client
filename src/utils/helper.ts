@@ -1,4 +1,8 @@
-import { ExerciseListType, ExerciseVolume } from "../types/exercise-types";
+import {
+  ExerciseListType,
+  ExerciseVolume,
+  ExerciseVoulmeItem,
+} from "../types/exercise-types";
 
 export const exerciseVolumeDashedStringConverter = (
   exerciseVolumes: ExerciseVolume[]
@@ -35,4 +39,31 @@ export const detectAndReturnUniqueExerciseLists = (
     uniqueExercises[exerciseList.name] = exerciseList;
   });
   return Object.values(uniqueExercises) as ExerciseListType[];
+};
+
+export const dashedExerciseVolumeUpdater = (
+  exerciseVolumeItem: ExerciseVoulmeItem,
+  index: number,
+  newValue: string
+): ExerciseVoulmeItem => {
+  const volume = exerciseVolumeItem.split("-");
+  volume[index] = newValue;
+  return volume.reduce((acc, current) => {
+    return acc + "" + current;
+  });
+};
+
+export const arrayWorkoutVolumeToDashedWorkoutVolume = (
+  workoutVolume: Array<string>
+): ExerciseVoulmeItem => {
+  return workoutVolume.reduce((acc, current) => {
+    return acc + "-" + current;
+  });
+};
+
+export const dashedExerciseVolumeSplitter = (
+  exerciseVolumeItem: ExerciseVoulmeItem
+): ExerciseVoulmeItem[] => {
+  const volume = exerciseVolumeItem.split("-");
+  return volume;
 };

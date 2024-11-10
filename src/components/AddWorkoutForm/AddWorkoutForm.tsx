@@ -115,9 +115,11 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
         {" "}
         <AddWorkoutVolumeButton
           handleWorkoutVolume={handleWorkoutVolumeAdition}
+          style={{ borderRadius: "8px", padding: "10px 20px", width: "49%" }}
         />{" "}
         <RemoveWorkoutVolumeButton
           handleWorkoutVolume={handleWorkoutVolumeRemoval}
+          style={{ borderRadius: "8px", padding: "10px 20px", width: "49%" }}
         />
       </span>
       <ExerciseVolumeAdder

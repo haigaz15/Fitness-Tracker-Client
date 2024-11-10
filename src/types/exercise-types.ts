@@ -73,3 +73,9 @@ export interface ExerciseVolume {
   rest: string;
   weight: string;
 }
+
+export type ExerciseVoulmeItem =
+  | ExerciseVolume["reps"]
+  | ExerciseVolume["rest"]
+  | ExerciseVolume["weight"]
+  | ExerciseVolume["set"];

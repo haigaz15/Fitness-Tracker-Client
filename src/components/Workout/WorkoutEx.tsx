@@ -2,19 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import {
   Autocomplete,
   Box,
+  Button,
   Checkbox,
   CircularProgress,
   Divider,
   FormControlLabel,
-  IconButton,
   Paper,
-  TextField,
   Typography,
 } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
-import EditIcon from "@mui/icons-material/Edit";
 import Date from "../Date/Date";
-import { exerciseVolumeDashedStringConverter } from "../../utils/helper";
+import {
+  arrayWorkoutVolumeToDashedWorkoutVolume,
+  dashedExerciseVolumeSplitter,
+  exerciseVolumeDashedStringConverter,
+} from "../../utils/helper";
 import {
   handleRepsChange,
   handleRestChange,
@@ -23,28 +24,38 @@ import {
 import ExerciseVolumeAdder from "../Exercise/ExerciseVolumeAdder";
 import RemoveWorkoutVolumeButton from "../Button/RemoveWorkoutVolumeButton";
 import AddWorkoutVolumeButton from "../Button/AddWorkoutVolumeButton";
-import { ExerciseOnWorkout, ExerciseVolume } from "../../types/exercise-types";
+import {
+  ExerciseCategory,
+  ExerciseOnWorkout,
+  ExerciseVolume,
+  ExerciseVoulmeItem,
+} from "../../types/exercise-types";
 import { CreateNewWorkoutModalProps } from "../../types/workout-type";
 import SaveButton from "../Button/SaveButton";
+import SaveIcon from "@mui/icons-material/Save";
 import CancelButton from "../Button/CancelButton";
 import WorkoutExercise from "./WorkoutExercise";
+import ThinTextField from "../Textfield/ThinTextfield";
+import TextArea from "../TextArea/TextArea";
 
-const categories = ["Strength", "Cardio", "Flexibility", "all"];
 const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
-  exercsies,
+  exercises,
   autoCompleteOpen,
   setAutoCompleteOpen,
   loadingExercises,
   autocompleteRefCall,
 }) => {
+  const categories = Object.values(ExerciseCategory);
   const [exerciseVolumes, setExerciseVolumes] = useState<ExerciseVolume[]>([]);
   const [workoutExercises, setWorkoutExercises] = useState<ExerciseOnWorkout[]>(
     []
   );
   const [exerciseName, setExerciseName] = useState<string | undefined>("");
-
   // experimental
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [workoutVolumeExpantion, setWorkoutVolumeExpantion] = useState<
+    { expanded: boolean }[]
+  >([]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prevCategories) =>
@@ -62,12 +73,65 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
       { set: "", reps: "", rest: "", weight: "" },
     ];
     setExerciseVolumes(newExerciseVolume);
+    setWorkoutVolumeExpantion((prev) => [...prev, { expanded: false }]);
   };
   const handleWorkoutVolumeRemoval = () => {
     setExerciseVolumes(exerciseVolumes.slice(0, exerciseVolumes.length - 1));
   };
 
+  const handleEditWorkoutVolume = (
+    exercise: ExerciseOnWorkout,
+    exerciseIndex: number,
+    workoutVolume: {
+      [key: ExerciseVoulmeItem]: Array<string>;
+    },
+    setWorkoutVolume: React.Dispatch<
+      React.SetStateAction<{
+        [key: string]: string[];
+      }>
+    >,
+    setWorkoutVolumeExpantion: React.Dispatch<
+      React.SetStateAction<
+        {
+          expanded: boolean;
+        }[]
+      >
+    >
+  ) => {
+    setWorkoutExercises((prev) => {
+      const newWorkoutExercises = [...prev];
+      newWorkoutExercises[exerciseIndex] = {
+        name: exercise.name,
+        set: exercise.set,
+        reps: arrayWorkoutVolumeToDashedWorkoutVolume(workoutVolume.reps),
+        rest: arrayWorkoutVolumeToDashedWorkoutVolume(workoutVolume.rest),
+        weight: arrayWorkoutVolumeToDashedWorkoutVolume(workoutVolume.weight),
+      };
+      return newWorkoutExercises;
+    });
+    setWorkoutVolume({
+      reps: dashedExerciseVolumeSplitter(exercise.reps),
+      rest: dashedExerciseVolumeSplitter(exercise.rest),
+      weight: dashedExerciseVolumeSplitter(exercise.weight),
+    });
+    setWorkoutVolumeExpantion((prev) => {
+      const newExpantion = [...prev];
+      newExpantion[exerciseIndex].expanded = false;
+      return newExpantion;
+    });
+  };
+
+  const handleExpantion = (index: number) => {
+    setWorkoutVolumeExpantion((prev) => {
+      const newExpantion = [...prev];
+      newExpantion[index].expanded = !newExpantion[index].expanded;
+      return newExpantion;
+    });
+  };
   const handleExerciseVolumeSave = (e: React.SyntheticEvent) => {
+    if (!exerciseVolumes || exerciseVolumes.length === 0) {
+      return;
+    }
     const result = exerciseVolumeDashedStringConverter(exerciseVolumes);
     setWorkoutExercises([
       ...workoutExercises,
@@ -82,6 +146,14 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
     console.log("Scrolled:", target.scrollTop);
+  };
+
+  const handleDeleteWorkoutExercise = (index: number) => {
+    const newWorkoutExercises = [
+      ...workoutExercises.slice(0, index),
+      ...workoutExercises.slice(index + 1, workoutExercises.length),
+    ];
+    setWorkoutExercises(newWorkoutExercises);
   };
   useEffect(() => {
     if (containerRef.current) {
@@ -100,15 +172,43 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
         <Box
           sx={{
             display: "flex",
+            width: "100%",
+            height: "50px",
+          }}
+        >
+          <Box
+            flexGrow={1}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Typography textAlign="left" variant="h5" color="primary">
+              Create Your Workout
+            </Typography>
+          </Box>
+          <Button
+            variant="text"
+            sx={{ borderBottom: "solid", borderBottomColor: "primary" }}
+          >
+            Save Workout <SaveIcon sx={{ marginLeft: 1 }} />
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
             marginTop: 2,
           }}
         >
-          <TextField
+          <ThinTextField
             label="Enter your Workout name"
             fullWidth
             sx={{ marginRight: 2 }}
           />
-          <Date />
+          <Box>
+            <Date />
+          </Box>
         </Box>
         <Box
           sx={{
@@ -142,7 +242,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
           </Box>
           <Box sx={{ marginTop: 2 }}>
             <Autocomplete
-              options={exercsies}
+              options={exercises}
               open={autoCompleteOpen}
               onOpen={() => setAutoCompleteOpen(true)}
               onClose={() => setAutoCompleteOpen(false)}
@@ -154,7 +254,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
               }}
               loading={loadingExercises}
               renderInput={(params) => (
-                <TextField
+                <ThinTextField
                   {...params}
                   label="Add Exercise"
                   fullWidth
@@ -176,7 +276,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
                 />
               )}
               renderOption={(props, option, { index }) =>
-                index === exercsies.length - 1 ? (
+                index === exercises.length - 1 ? (
                   <Paper
                     {...props}
                     onScroll={handleScroll}
@@ -223,15 +323,27 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
           </Box>
         </Box>
         <Box sx={{ marginTop: 1 }}>
-          <span>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             {" "}
             <AddWorkoutVolumeButton
               handleWorkoutVolume={handleWorkoutVolumeAdition}
+              style={{
+                borderRadius: "8px",
+                padding: "5px 10px",
+                width: "49%",
+                height: "32px",
+              }}
             />{" "}
             <RemoveWorkoutVolumeButton
               handleWorkoutVolume={handleWorkoutVolumeRemoval}
+              style={{
+                borderRadius: "8px",
+                padding: "5px 10px",
+                width: "49%",
+                height: "32px",
+              }}
             />
-          </span>
+          </Box>
           <ExerciseVolumeAdder
             exerciseVolumes={exerciseVolumes}
             containerRef={containerRef}
@@ -239,74 +351,69 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
             handleRestChange={handleRestChange}
             handleWeightChange={handleWeightChange}
           />
-          <Box sx={{ display: "flex", marginTop: 1 }}>
-            <Box sx={{ width: "49%" }}>
-              <SaveButton
-                handleClick={handleExerciseVolumeSave}
-                style={{
-                  borderRadius: "8px",
-                  padding: "10px 20px",
-                  width: "100%",
-                }}
-                buttonTitle="save exercise"
-              />
-            </Box>
-            <Box sx={{ width: "49%", marginLeft: 0.7 }}>
-              <CancelButton
-                handleClick={() => console.log("canceled")}
-                style={{
-                  borderRadius: "8px",
-                  padding: "10px 20px",
-                  width: "100%",
-                }}
-                buttonTitle="Cancel"
-              />
-            </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 1,
+            }}
+          >
+            <SaveButton
+              handleClick={handleExerciseVolumeSave}
+              style={{
+                borderRadius: "8px",
+                padding: "5px 10px",
+                width: "49%",
+                height: "32px",
+              }}
+              buttonTitle="save exercise"
+            />
+            <CancelButton
+              handleClick={() => setExerciseVolumes([])}
+              style={{
+                borderRadius: "8px",
+                padding: "5px 10px",
+                width: "49%",
+                height: "32px",
+              }}
+              buttonTitle="Cancel"
+            />
           </Box>
         </Box>
       </Box>
-      <Box>
-        <Divider sx={{ marginTop: "2.5%" }} />
-        <Typography sx={{ marginTop: 2 }} variant="h6">
+      <Divider sx={{ marginTop: "2.5%" }} />
+      <Box
+        sx={{
+          boxShadow: 1,
+          marginTop: 1,
+          padding: 1,
+        }}
+      >
+        <Typography sx={{ marginTop: 2, padding: 1 }} variant="h6">
           Added Exercises
         </Typography>{" "}
-        {workoutExercises.map((workoutExercise) => (
+        {workoutExercises.map((workoutExercise, index) => (
           <Box sx={{ display: "flex" }}>
-            <WorkoutExercise exercise={workoutExercise} hasExpantion={false} />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <IconButton
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "inherit", // Prevent background color change on hover
-                  },
-                  marginLeft: 2,
-                  width: 40,
-                  height: 40,
-                }}
-              >
-                <CancelIcon fontSize="medium" />
-              </IconButton>
-              <IconButton
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "inherit", // Prevent background color change on hover
-                  },
-                  marginLeft: 2,
-                  width: 40,
-                  height: 40,
-                }}
-              >
-                <EditIcon fontSize="medium" />
-              </IconButton>
-            </Box>
+            <WorkoutExercise
+              exerciseIndex={index}
+              exercise={workoutExercise}
+              handleDeleteWorkoutExercise={() =>
+                handleDeleteWorkoutExercise(index)
+              }
+              handleEditWorkoutVolume={handleEditWorkoutVolume}
+              workoutVolumeExpantion={workoutVolumeExpantion}
+              handleExpantion={handleExpantion}
+              setWorkoutVolumeExpantion={setWorkoutVolumeExpantion}
+            />
           </Box>
         ))}
+      </Box>
+      <Divider />
+      <Box sx={{ boxShadow: 1, marginTop: 1, marginBottom: 1, maxHeight: 300 }}>
+        <Typography sx={{ marginTop: 2, padding: 1 }} variant="h6">
+          Workout Notes
+        </Typography>{" "}
+        <TextArea label="add your workout notes" />
       </Box>
     </Box>
   );

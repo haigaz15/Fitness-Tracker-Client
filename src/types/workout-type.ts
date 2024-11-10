@@ -31,7 +31,7 @@ export interface WorkoutHeadProps {
 }
 
 export interface CreateNewWorkoutModalProps {
-  exercsies: ExerciseListType[];
+  exercises: ExerciseListType[];
   handleLoadMoreExercises?: (e: React.SyntheticEvent) => void;
   autoCompleteOpen: boolean;
   setAutoCompleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,7 +41,7 @@ export interface CreateNewWorkoutModalProps {
 
 export interface WorkoutPresenterProps {
   renderWorkoutList: () => React.ReactNode;
-  renderWorkoutEx: () => React.ReactNode;
+  renderWorkoutListItem: () => React.ReactNode;
   mainStyle: { [key: string]: any };
   workoutListStyle: { [key: string]: any };
   workoutExStyle: { [key: string]: any };

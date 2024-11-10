@@ -99,7 +99,7 @@ const ExerciseVolumeAdder: React.FC<{
                       InputProps={{ inputProps: { min: 0 } }}
                       sx={{
                         width: 80,
-                        "& .MuiInputBase-root": { height: "40px" },
+                        "& .MuiInputBase-root": { height: "35px" },
                       }}
                     />
                   </TableCell>
@@ -112,7 +112,7 @@ const ExerciseVolumeAdder: React.FC<{
                       }
                       sx={{
                         width: 80,
-                        "& .MuiInputBase-root": { height: "40px" },
+                        "& .MuiInputBase-root": { height: "35px" },
                       }}
                     />
                   </TableCell>
@@ -125,7 +125,7 @@ const ExerciseVolumeAdder: React.FC<{
                       InputProps={{ inputProps: { min: 0 } }}
                       sx={{
                         width: 80,
-                        "& .MuiInputBase-root": { height: "40px" },
+                        "& .MuiInputBase-root": { height: "35px" },
                       }}
                     />
                   </TableCell>
