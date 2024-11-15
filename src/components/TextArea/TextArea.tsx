@@ -1,9 +1,23 @@
-import { TextField } from "@mui/material";
+import {
+  FilledTextFieldProps,
+  OutlinedTextFieldProps,
+  StandardTextFieldProps,
+  TextField,
+  TextFieldVariants,
+} from "@mui/material";
+import { JSX } from "react/jsx-runtime";
 
-const TextArea: React.FC<{ label: string }> = ({ label }) => {
+const TextArea = (
+  props: JSX.IntrinsicAttributes & {
+    variant?: TextFieldVariants | undefined;
+  } & Omit<
+      FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps,
+      "variant"
+    >
+) => {
   return (
     <TextField
-      label={label}
+      {...props}
       multiline
       rows={2} // Controls the height (number of visible rows)
       variant="standard"

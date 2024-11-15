@@ -1,11 +1,14 @@
-import { List, ListItemButton } from "@mui/material";
+import { CircularProgress, List, ListItemButton } from "@mui/material";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useNavigate } from "react-router-dom";
+import { WorkoutSession } from "../../types/workout-type";
 
 const WorkoutList: React.FC<{
+  workoutSessions: WorkoutSession[];
   setWorkoutCreator: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setWorkoutCreator }) => {
+  loading: boolean;
+}> = ({ workoutSessions, setWorkoutCreator, loading }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
@@ -17,15 +20,31 @@ const WorkoutList: React.FC<{
       <List>
         <ListItemButton
           sx={{ height: "55px", color: "primary.main" }}
-          onClick={() => setWorkoutCreator(true)}
+          onClick={() => {
+            setWorkoutCreator(true);
+            navigate("");
+          }}
         >
           {" "}
           <AddCircleIcon sx={{ marginRight: 2 }} />
           Create new Workout
         </ListItemButton>
-        <ListItemButton onClick={() => handleNavigation("chest")}>
-          Chest and Bieceps
-        </ListItemButton>
+        {workoutSessions.map((workoutSession) => (
+          <ListItemButton
+            onClick={() => {
+              handleNavigation(workoutSession.id);
+            }}
+          >
+            {workoutSession.name}
+          </ListItemButton>
+        ))}
+        {loading && (
+          <CircularProgress
+            color="primary"
+            size={28}
+            style={{ marginRight: 10 }}
+          />
+        )}
       </List>
     </>
   );

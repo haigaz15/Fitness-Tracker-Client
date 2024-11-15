@@ -7,7 +7,9 @@ import "./ExerciseList.css";
 import { useStore } from "../../hooks/userStore";
 import Pagination from "../../components/Pagination/Pagination";
 import { Box } from "@mui/material";
-
+import Loading from "../../components/Loading/Loading";
+import Error from "../../components/Error/Error";
+import NoMoreExercise from "../../components/Exercise/NoMoreExercise";
 const ExerciseList: React.FC<any> = observer(() => {
   const [tabValue, setTabValue] = useState<string>("barbell");
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -44,8 +46,9 @@ const ExerciseList: React.FC<any> = observer(() => {
         handleTabValueChange={handleTabValueChange}
       />
 
-      {exerciseStore.loading && <div>Loading...</div>}
-      {exerciseStore.error && <div>Error: {exerciseStore.error}</div>}
+      {exerciseStore.loading && <Loading />}
+      {exerciseStore.error && <Error error={exerciseStore.error} />}
+      {exerciseStore.exerciseList.length === 0 && <NoMoreExercise />}
       <Box className="exercise-list">
         {!exerciseStore.loading &&
           !exerciseStore.error &&

@@ -21,7 +21,24 @@ export class WorkoutStore {
     } catch (err) {
       this.error = "failed to load workouts!";
     } finally {
-      this.loading = false;
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
+    }
+  };
+
+  setWorkoutSessions = async (payload: WorkoutSession): Promise<void> => {
+    this.loading = true;
+    try {
+      await workoutAPIServiceInstance.postWorkoutSessionWithExercises(payload);
+      this.workoutSessions =
+        await workoutAPIServiceInstance.getWorkoutWithExercises();
+    } catch (error) {
+      this.error = "failed to post to workouts";
+    } finally {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }
   };
 }

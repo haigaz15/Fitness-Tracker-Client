@@ -37,6 +37,7 @@ import CancelButton from "../Button/CancelButton";
 import WorkoutExercise from "./WorkoutExercise";
 import ThinTextField from "../Textfield/ThinTextfield";
 import TextArea from "../TextArea/TextArea";
+import dayjs, { Dayjs } from "dayjs";
 
 const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
   exercises,
@@ -44,6 +45,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
   setAutoCompleteOpen,
   loadingExercises,
   autocompleteRefCall,
+  handleSaveWorkout,
 }) => {
   const categories = Object.values(ExerciseCategory);
   const [exerciseVolumes, setExerciseVolumes] = useState<ExerciseVolume[]>([]);
@@ -51,6 +53,15 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
     []
   );
   const [exerciseName, setExerciseName] = useState<string | undefined>("");
+  const [workoutForum, setWorkoutForum] = useState<{
+    name: string;
+    date: Dayjs | null; // Date is now of type Dayjs or null
+    notes: string;
+  }>({
+    name: "",
+    date: null, // Initialize as null or dayjs()
+    notes: "",
+  });
   // experimental
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [workoutVolumeExpantion, setWorkoutVolumeExpantion] = useState<
@@ -160,6 +171,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [exerciseVolumes]);
+
   return (
     <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
       <Box
@@ -191,6 +203,16 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
           <Button
             variant="text"
             sx={{ borderBottom: "solid", borderBottomColor: "primary" }}
+            onClick={() =>
+              handleSaveWorkout(
+                workoutForum.name,
+                workoutForum.date,
+                workoutForum.notes,
+                workoutExercises,
+                setWorkoutExercises,
+                setWorkoutForum
+              )
+            }
           >
             Save Workout <SaveIcon sx={{ marginLeft: 1 }} />
           </Button>
@@ -205,9 +227,24 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
             label="Enter your Workout name"
             fullWidth
             sx={{ marginRight: 2 }}
+            value={workoutForum.name}
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => {
+              const newForum = { ...workoutForum };
+              newForum.name = e.target.value;
+              setWorkoutForum(newForum);
+            }}
           />
           <Box>
-            <Date />
+            <Date
+              value={workoutForum.date}
+              onChange={(newValue) => {
+                const newForum = { ...workoutForum };
+                newForum.date = newValue || dayjs();
+                setWorkoutForum(newForum);
+              }}
+            />
           </Box>
         </Box>
         <Box
@@ -258,6 +295,9 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
                   {...params}
                   label="Add Exercise"
                   fullWidth
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setExerciseName(e.target.value)
+                  }
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
@@ -413,7 +453,17 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
         <Typography sx={{ marginTop: 2, padding: 1 }} variant="h6">
           Workout Notes
         </Typography>{" "}
-        <TextArea label="add your workout notes" />
+        <TextArea
+          label="add your workout notes"
+          value={workoutForum.notes}
+          onChange={(
+            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => {
+            const newForum = { ...workoutForum };
+            newForum.notes = e.target.value;
+            setWorkoutForum(newForum);
+          }}
+        />
       </Box>
     </Box>
   );

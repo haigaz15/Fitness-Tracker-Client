@@ -203,6 +203,7 @@ const WorkoutExercise: React.FC<{
                 value={index + 1}
               />
               <TextField
+                type="number"
                 size="small"
                 name="reps"
                 sx={{ width: "80px" }}
@@ -212,6 +213,7 @@ const WorkoutExercise: React.FC<{
                 }
               />
               <TextField
+                type="number"
                 size="small"
                 name="rest"
                 sx={{ width: "80px" }}
@@ -221,6 +223,7 @@ const WorkoutExercise: React.FC<{
                 }
               />
               <TextField
+                type="number"
                 size="small"
                 name="weight"
                 sx={{ width: "80px" }}

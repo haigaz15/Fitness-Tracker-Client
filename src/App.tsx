@@ -28,7 +28,7 @@ function App() {
         {
           path: "workouts",
           element: <WorkoutContainer />,
-          children: [{ path: "chest", element: <WorkoutListItems /> }],
+          children: [{ path: ":id", element: <WorkoutListItems /> }],
         },
         { path: "analytics", element: <Analytics /> },
       ],

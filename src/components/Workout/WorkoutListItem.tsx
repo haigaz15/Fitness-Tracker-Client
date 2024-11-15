@@ -1,11 +1,15 @@
 import { Box, Typography } from "@mui/material";
+import { WorkoutSession } from "../../types/workout-type";
+import { ExerciseOnWorkout } from "../../types/exercise-types";
 
-const WorkoutListItem = () => {
+const WorkoutListItem: React.FC<{ exercise: ExerciseOnWorkout }> = ({
+  exercise,
+}) => {
   return (
     <Box sx={{ width: "80%", marginTop: 1, display: "flex", boxShadow: 2 }}>
       <Box sx={{ flex: 1.5, height: "320px" }}></Box>
       <Box sx={{ flex: 3, display: "flex", flexDirection: "column" }}>
-        <Typography variant="h6">Exercise Name: </Typography>
+        <Typography variant="h6">Exercise Name: {exercise.name} </Typography>
         <Typography variant="body2" sx={{ flex: 2, marginTop: 1 }}>
           Contrary to popular belief, Lorem Ipsum is not simply random text. It
           has roots in a piece of classical Latin literature from 45 BC, making
@@ -23,7 +27,8 @@ const WorkoutListItem = () => {
           }}
         >
           <Typography variant="subtitle1" textAlign="left">
-            Set: 4 Reps: 12-12-4-4 Rest: 30-30-20-20 Weight: 140-140-150-160
+            Set: {exercise.set} Reps: {exercise.reps} Rest: {exercise.rest}{" "}
+            Weight: {exercise.weight}
           </Typography>
           <Typography variant="subtitle1" textAlign="left">
             Primary Muscle: Chest

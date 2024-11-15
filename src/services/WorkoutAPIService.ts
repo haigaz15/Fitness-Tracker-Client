@@ -9,6 +9,25 @@ class WorkoutAPIService {
     );
     return (await response.data) as WorkoutSession[];
   }
+
+  async postWorkoutSessionWithExercises(payload: WorkoutSession) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/${WORKOUTURL.POST_WORKOUTWITHEXERCISE}`,
+        payload,
+        config
+      );
+      return await response.data.message;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 const workoutAPIServiceInstance = new WorkoutAPIService();

@@ -1,15 +1,18 @@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
 import EventIcon from "@mui/icons-material/Event";
 import { IconButton, InputAdornment } from "@mui/material";
-import { useState } from "react";
+import { RefAttributes, useState } from "react";
 import { Dayjs } from "dayjs";
 
-const Date = () => {
+const Date = (
+  props: JSX.IntrinsicAttributes &
+    DatePickerProps<Dayjs, false> &
+    RefAttributes<HTMLDivElement>
+) => {
   // State to control the open/close of DatePicker
   const [open, setOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   // Toggle date picker visibility when icon is clicked
   const handleIconClick = () => {
@@ -19,9 +22,8 @@ const Date = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
+        {...props}
         label="Basic date picker"
-        value={selectedDate}
-        onChange={(newDate) => setSelectedDate(newDate)}
         open={open} // Control the opening of the date picker
         onOpen={() => setOpen(true)} // Triggered when the picker opens
         onClose={() => setOpen(false)} // Triggered when the picker closes

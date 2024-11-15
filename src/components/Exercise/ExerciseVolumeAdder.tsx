@@ -105,6 +105,7 @@ const ExerciseVolumeAdder: React.FC<{
                   </TableCell>
                   <TableCell sx={{ padding: "4px 8px", borderBottom: "none" }}>
                     <TextField
+                      type="number"
                       name="rest"
                       InputProps={{ inputProps: { min: 0 } }}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -118,6 +119,7 @@ const ExerciseVolumeAdder: React.FC<{
                   </TableCell>
                   <TableCell sx={{ padding: "4px 8px", borderBottom: "none" }}>
                     <TextField
+                      type="number"
                       name="weight"
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         handleWeightChange(e, exerciseVolume)

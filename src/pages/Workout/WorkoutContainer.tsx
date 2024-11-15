@@ -4,10 +4,18 @@ import WorkoutList from "../../components/Workout/WorkoutList";
 import WorkoutPresenter from "./WorkoutPresenter";
 import { useCallback, useEffect, useState } from "react";
 import exerciseAPIServiceInstance from "../../services/ExerciseAPIService";
-import { ExerciseListType } from "../../types/exercise-types";
+import {
+  ExerciseListType,
+  ExerciseOnWorkout,
+} from "../../types/exercise-types";
 import { detectAndReturnUniqueExerciseLists } from "../../utils/helper";
-import { Outlet } from "react-router-dom";
-
+import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { WorkoutSession } from "../../types/workout-type";
+import { v4 as uuidv4 } from "uuid";
+import { useStore } from "../../hooks/userStore";
+import { observer } from "mobx-react";
+import Loading from "../../components/Loading/Loading";
+import { Dayjs } from "dayjs";
 const mainStyle = {
   display: "flex",
   marginTop: "76px",
@@ -21,15 +29,52 @@ const workoutExStyle = {
   marginLeft: 0.5,
   marginRight: 0.5,
 };
-const WorkoutContainer = () => {
+const WorkoutContainer = observer(() => {
   const [autoCompleteOpen, setAutoCompleteOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [exercises, setExercises] = useState<ExerciseListType[]>([]);
   const [loadingExercises, setLoadingExercises] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [workoutCreator, setWorkoutCreator] = useState(true);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { workoutStore } = useStore();
 
-  const handleSaveWorkout = () => {};
+  const handleSaveWorkout = (
+    workoutName: string,
+    workoutDate: Dayjs | null,
+    workoutNotes: string,
+    workoutExercises: ExerciseOnWorkout[],
+    setWorkoutExercises: React.Dispatch<
+      React.SetStateAction<ExerciseOnWorkout[]>
+    >,
+    setWorkoutForum: React.Dispatch<
+      React.SetStateAction<{
+        name: string;
+        date: Dayjs | null;
+        notes: string;
+      }>
+    >
+  ) => {
+    const lastWorkoutSessionId = uuidv4();
+    workoutStore.setWorkoutSessions({
+      id: lastWorkoutSessionId,
+      name: workoutName,
+      workoutDate: workoutDate?.toDate(),
+      exercises: workoutExercises,
+      notes: workoutNotes,
+    } as WorkoutSession);
+    setWorkoutExercises([]);
+    setWorkoutForum({ name: "", notes: "", date: null });
+    setWorkoutCreator(false);
+    navigate(`${lastWorkoutSessionId}`);
+  };
+
+  useEffect(() => {}, [workoutStore.loading]);
+
+  useEffect(() => {
+    if (!id) setWorkoutCreator(true);
+  }, [id]);
 
   const autocompleteRefCall = useCallback(
     (node: HTMLDivElement | null) => {
@@ -82,7 +127,11 @@ const WorkoutContainer = () => {
     <Box sx={{ width: "100%", height: "100%" }}>
       <WorkoutPresenter
         renderWorkoutList={() => (
-          <WorkoutList setWorkoutCreator={setWorkoutCreator} />
+          <WorkoutList
+            workoutSessions={workoutStore.workoutSessions}
+            setWorkoutCreator={setWorkoutCreator}
+            loading={workoutStore.loading}
+          />
         )}
         renderWorkoutListItem={() =>
           workoutCreator ? (
@@ -92,9 +141,22 @@ const WorkoutContainer = () => {
               setAutoCompleteOpen={setAutoCompleteOpen}
               autocompleteRefCall={autocompleteRefCall}
               loadingExercises={loadingExercises}
+              handleSaveWorkout={handleSaveWorkout}
             />
+          ) : workoutStore.loading ? (
+            <Loading />
           ) : (
-            <Outlet />
+            <Outlet
+              context={[
+                workoutStore.workoutSessions,
+                exercises,
+                autoCompleteOpen,
+                setAutoCompleteOpen,
+                autocompleteRefCall,
+                loadingExercises,
+                handleSaveWorkout,
+              ]}
+            />
           )
         }
         mainStyle={mainStyle}
@@ -103,6 +165,6 @@ const WorkoutContainer = () => {
       />
     </Box>
   );
-};
+});
 
 export default WorkoutContainer;

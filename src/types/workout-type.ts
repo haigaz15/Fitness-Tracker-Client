@@ -1,9 +1,11 @@
 import React from "react";
 import { ExerciseListType, ExerciseOnWorkout } from "./exercise-types";
+import { Dayjs } from "dayjs";
 
 export interface WorkoutSession {
+  id: string;
   name: string;
-  workoutDate: string;
+  workoutDate: Date;
   notes: string;
   exercises: ExerciseOnWorkout[];
 }
@@ -37,6 +39,22 @@ export interface CreateNewWorkoutModalProps {
   setAutoCompleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
   loadingExercises?: boolean;
   autocompleteRefCall?: (node: HTMLDivElement | null) => void;
+  handleSaveWorkout: (
+    workoutName: string,
+    workoutDate: Dayjs | null,
+    workoutNotes: string,
+    workoutExercises: ExerciseOnWorkout[],
+    setWorkoutExercises: React.Dispatch<
+      React.SetStateAction<ExerciseOnWorkout[]>
+    >,
+    setWorkoutForum: React.Dispatch<
+      React.SetStateAction<{
+        name: string;
+        date: Dayjs | null;
+        notes: string;
+      }>
+    >
+  ) => void;
 }
 
 export interface WorkoutPresenterProps {

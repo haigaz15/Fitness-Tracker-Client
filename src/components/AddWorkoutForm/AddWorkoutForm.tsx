@@ -16,7 +16,10 @@ import {
 const AddWorkoutList = () => {
   const { workoutStore } = useStore();
   return workoutStore.workoutSessions.map((workout) => (
-    <MenuItem key={workout.workoutDate} value={workout.name}>
+    <MenuItem
+      key={new Date(workout.workoutDate).toISOString()}
+      value={workout.name}
+    >
       {workout.name}
     </MenuItem>
   ));
