@@ -1,25 +1,62 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import TextArea from "../TextArea/TextArea";
-import WorkoutListItem from "./WorkoutListItem";
 import { useOutletContext, useParams } from "react-router-dom";
+import { mockItems } from "../../utils/generator";
+import WorkoutExTable from "./WorkoutExTable";
+import ExModal from "../modal/ExModal";
+import WorkoutSessionModalContent from "./WorkoutSessionModalContent";
 import { WorkoutSession } from "../../types/workout-type";
-import { ExerciseOnWorkout } from "../../types/exercise-types";
-
+import { ExerciseOnWorkoutWithError } from "../../types/exercise-types";
 const WorkoutListItems = () => {
   const { id } = useParams<{ id: string }>();
-  const [workoutSessions]: [WorkoutSession[]] = useOutletContext();
+  const [
+    workoutSessions,
+    workoutSessionModalOpen,
+    setWorkoutSessionModalOpen,
+    handleWorkoutSession,
+  ]: [
+    WorkoutSession[],
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+    (logs: ExerciseOnWorkoutWithError[], sessionTime: string) => void
+  ] = useOutletContext();
   const items = workoutSessions.filter(
     (workoutSession: WorkoutSession) => workoutSession.id === id
   );
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "94%",
+        padding: 2,
+      }}
+    >
       <Box
         sx={{ display: "flex", marginTop: 1, justifyContent: "space-between" }}
       >
-        <Typography variant="h4" textAlign="left">
+        <Typography
+          variant="h4"
+          textAlign="left"
+          sx={{
+            background: "linear-gradient(90deg, #333333, #555555, #777777)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}
+        >
           {items.length > 0 && items[0].name}
         </Typography>
-        <Typography variant="h4" textAlign="left">
+        <Typography
+          variant="h4"
+          textAlign="left"
+          sx={{
+            background: "linear-gradient(90deg, #333333, #555555, #777777)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}
+        >
           Date:{" "}
           {items.length > 0 &&
             `${new Date(items[0].workoutDate).getDay()}/${new Date(
@@ -27,27 +64,38 @@ const WorkoutListItems = () => {
             ).getMonth()}/${new Date(items[0].workoutDate).getFullYear()}`}
         </Typography>
       </Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button onClick={() => setWorkoutSessionModalOpen(true)}>
+          Start Workout Session
+        </Button>
+        <Button>Add Workout to a Program</Button>
+      </Box>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
           marginTop: 1,
           width: "100%",
-          height: "100%",
+          height: "465px",
+          overflowY: "auto",
         }}
       >
-        {items.length > 0 &&
-          items[0].exercises.map((exercise: ExerciseOnWorkout) => (
-            <WorkoutListItem exercise={exercise} />
-          ))}
+        <WorkoutExTable exercises={mockItems} />
       </Box>
-      <Divider />
+
       <Box sx={{ marginTop: 2 }}>
         <Typography textAlign="left" variant="h6">
           Your Workout Notes :
         </Typography>
         <TextArea value={items.length > 0 && items[0].notes} />
       </Box>
+      <ExModal
+        open={workoutSessionModalOpen}
+        handleClose={() => setWorkoutSessionModalOpen(false)}
+        renderModalContent={() => (
+          <WorkoutSessionModalContent
+            handleWorkoutSession={handleWorkoutSession}
+          />
+        )}
+      />
     </Box>
   );
 };

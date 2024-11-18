@@ -6,18 +6,21 @@ const WorkoutListItem: React.FC<{ exercise: ExerciseOnWorkout }> = ({
   exercise,
 }) => {
   return (
-    <Box sx={{ width: "80%", marginTop: 1, display: "flex", boxShadow: 2 }}>
-      <Box sx={{ flex: 1.5, height: "320px" }}></Box>
+    <Box
+      sx={{
+        width: "31%",
+        height: "30%",
+        marginTop: 1,
+        display: "flex",
+        boxShadow: 2,
+      }}
+    >
+      <Box sx={{ flex: 1.5 }}></Box>
       <Box sx={{ flex: 3, display: "flex", flexDirection: "column" }}>
-        <Typography variant="h6">Exercise Name: {exercise.name} </Typography>
-        <Typography variant="body2" sx={{ flex: 2, marginTop: 1 }}>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It
-          has roots in a piece of classical Latin literature from 45 BC, making
-          it over 2000 years old. Richard McClintock, a Latin professor at
-          Hampden-Sydney College in Virginia, looked up one of the more obscure
-          Latin words, consectetur, from a Lorem Ipsum passage, and going
-          through the cites of...
+        <Typography variant="subtitle1">
+          Exercise Name: {exercise.name}{" "}
         </Typography>
+
         <Box
           id="targets"
           sx={{
@@ -30,7 +33,7 @@ const WorkoutListItem: React.FC<{ exercise: ExerciseOnWorkout }> = ({
             Set: {exercise.set} Reps: {exercise.reps} Rest: {exercise.rest}{" "}
             Weight: {exercise.weight}
           </Typography>
-          <Typography variant="subtitle1" textAlign="left">
+          {/* <Typography variant="subtitle1" textAlign="left">
             Primary Muscle: Chest
           </Typography>
           <Typography variant="subtitle2" textAlign="left">
@@ -38,7 +41,7 @@ const WorkoutListItem: React.FC<{ exercise: ExerciseOnWorkout }> = ({
           </Typography>
           <Typography variant="subtitle2" textAlign="left">
             Difficulty: Hard
-          </Typography>
+          </Typography> */}
         </Box>
       </Box>
     </Box>

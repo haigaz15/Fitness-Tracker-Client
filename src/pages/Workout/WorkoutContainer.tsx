@@ -7,8 +7,13 @@ import exerciseAPIServiceInstance from "../../services/ExerciseAPIService";
 import {
   ExerciseListType,
   ExerciseOnWorkout,
+  ExerciseOnWorkoutWithError,
 } from "../../types/exercise-types";
-import { detectAndReturnUniqueExerciseLists } from "../../utils/helper";
+import {
+  dashedExerciseVolumeSplitterToNumber,
+  detectAndReturnUniqueExerciseLists,
+  volumeTotalCount,
+} from "../../utils/helper";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { WorkoutSession } from "../../types/workout-type";
 import { v4 as uuidv4 } from "uuid";
@@ -36,9 +41,61 @@ const WorkoutContainer = observer(() => {
   const [loadingExercises, setLoadingExercises] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [workoutCreator, setWorkoutCreator] = useState(true);
+  const [workoutSessionModalOpen, setWorkoutSessionModalOpen] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const { workoutStore } = useStore();
+
+  const handleWorkoutSession = (
+    logs: ExerciseOnWorkoutWithError[],
+    sessionTime: string
+  ) => {
+    const volume = logs.map((log) => {
+      return !log.error
+        ? {
+            sets: volumeTotalCount([
+              dashedExerciseVolumeSplitterToNumber(log.reps).length,
+            ]),
+            reps: volumeTotalCount(
+              dashedExerciseVolumeSplitterToNumber(log.reps)
+            ),
+            rest: volumeTotalCount(
+              dashedExerciseVolumeSplitterToNumber(log.rest)
+            ),
+            weight: volumeTotalCount(
+              dashedExerciseVolumeSplitterToNumber(log.weight)
+            ),
+          }
+        : {
+            reps: 0,
+            sets: 0,
+            rest: 0,
+            weight: 0,
+          };
+    });
+    console.log("volume", volume);
+    const totalVolume = {
+      totalReps: 0,
+      totalSets: 0,
+      totalWeight: 0,
+      totalRest: 0,
+    };
+    totalVolume.totalSets = volume.reduce((acc: number, curr) => {
+      return acc + curr.sets;
+    }, 0);
+    totalVolume.totalReps = volume.reduce((acc: number, curr) => {
+      return acc + curr.reps;
+    }, 0);
+    totalVolume.totalRest = volume.reduce((acc: number, curr) => {
+      return acc + curr.rest;
+    }, 0);
+    totalVolume.totalWeight = volume.reduce((acc: number, curr) => {
+      return acc + curr.weight;
+    }, 0);
+    setWorkoutSessionModalOpen(false);
+    console.log("totalVolume", totalVolume);
+    console.log("sessionTime:", sessionTime);
+  };
 
   const handleSaveWorkout = (
     workoutName: string,
@@ -149,12 +206,9 @@ const WorkoutContainer = observer(() => {
             <Outlet
               context={[
                 workoutStore.workoutSessions,
-                exercises,
-                autoCompleteOpen,
-                setAutoCompleteOpen,
-                autocompleteRefCall,
-                loadingExercises,
-                handleSaveWorkout,
+                workoutSessionModalOpen,
+                setWorkoutSessionModalOpen,
+                handleWorkoutSession,
               ]}
             />
           )

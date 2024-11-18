@@ -196,7 +196,16 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
               justifyContent: "center",
             }}
           >
-            <Typography textAlign="left" variant="h5" color="primary">
+            <Typography
+              textAlign="left"
+              variant="h5"
+              sx={{
+                background: "linear-gradient(90deg, #333333, #555555, #777777)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: "bold",
+              }}
+            >
               Create Your Workout
             </Typography>
           </Box>
@@ -254,7 +263,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
             marginTop: 2,
           }}
         >
-          <Typography variant="h6">Choose catagory </Typography>
+          <Typography variant="h6">Choose category </Typography>
           {/* Category Checkboxes */}
           <Box
             sx={{

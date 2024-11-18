@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
-
+// import type {} from '@mui/x-charts/themeAugmentation';
+// import type {} from '@mui/x-charts-pro/themeAugmentation';
 export const globalTheme = createTheme({
   palette: {
     primary: {
@@ -72,6 +73,13 @@ export const globalTheme = createTheme({
             color: "#FF3D00", // Keep text red
           },
         },
+        // MuiChartsAxis: {
+        //   styleOverrides: {
+        //     tick: {
+        //       stroke: '#006BD6',
+        //     },
+        //   },
+        // },
       },
     },
   },

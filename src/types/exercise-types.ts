@@ -79,3 +79,11 @@ export type ExerciseVoulmeItem =
   | ExerciseVolume["rest"]
   | ExerciseVolume["weight"]
   | ExerciseVolume["set"];
+
+export type ExerciseOnWorkoutWithError = Omit<
+  ExerciseOnWorkout,
+  "set" | "name"
+> & {
+  error: boolean;
+  errorType: string;
+};

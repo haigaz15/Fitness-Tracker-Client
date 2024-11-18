@@ -1,6 +1,6 @@
-import { ExerciseListType } from "../types/exercise-types";
+import { ExerciseListType, ExerciseOnWorkout } from "../types/exercise-types";
 
-function genorateExercises(): ExerciseListType[] {
+export const genorateExercises = () => {
   const exercises: ExerciseListType[] = [];
 
   // for (let i = 0; i < 10; i++) {
@@ -12,6 +12,77 @@ function genorateExercises(): ExerciseListType[] {
   //   });
   // }
   return exercises;
-}
+};
 
-export default genorateExercises;
+export const mockItems: ExerciseOnWorkout[] = [
+  {
+    name: "Bench Press",
+    set: 4,
+    reps: "10-12",
+    rest: "90 seconds",
+    weight: "70 kg",
+  },
+  {
+    name: "Squats",
+    set: 4,
+    reps: "8-10",
+    rest: "2 minutes",
+    weight: "100 kg",
+  },
+  {
+    name: "Deadlift",
+    set: 3,
+    reps: "5-6",
+    rest: "3 minutes",
+    weight: "120 kg",
+  },
+  {
+    name: "Pull-Ups",
+    set: 3,
+    reps: "12-15",
+    rest: "1 minute",
+    weight: "Bodyweight",
+  },
+  {
+    name: "Overhead Press",
+    set: 4,
+    reps: "10-12",
+    rest: "90 seconds",
+    weight: "40 kg",
+  },
+  {
+    name: "Barbell Row",
+    set: 4,
+    reps: "8-10",
+    rest: "2 minutes",
+    weight: "60 kg",
+  },
+  {
+    name: "Dumbbell Curls",
+    set: 3,
+    reps: "10-12",
+    rest: "1 minute",
+    weight: "15 kg each arm",
+  },
+  {
+    name: "Tricep Dips",
+    set: 3,
+    reps: "12-15",
+    rest: "1 minute",
+    weight: "Bodyweight",
+  },
+  {
+    name: "Lunges",
+    set: 3,
+    reps: "10-12 per leg",
+    rest: "1 minute",
+    weight: "20 kg dumbbells",
+  },
+  {
+    name: "Plank",
+    set: 3,
+    reps: "Hold for 60 seconds",
+    rest: "30 seconds",
+    weight: "Bodyweight",
+  },
+];

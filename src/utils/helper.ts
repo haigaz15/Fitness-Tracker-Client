@@ -67,3 +67,30 @@ export const dashedExerciseVolumeSplitter = (
   const volume = exerciseVolumeItem.split("-");
   return volume;
 };
+
+export const dashedExerciseVolumeSplitterToNumber = (
+  exerciseVolumeItem: ExerciseVoulmeItem
+): number[] => {
+  const volume = exerciseVolumeItem
+    .split("-")
+    .map((exerciseVolume) => Number(exerciseVolume));
+  return volume;
+};
+
+export const volumeTotalCount = (items: any[]): number => {
+  return items.reduce((acc, current) => {
+    return Number(acc) + Number(current);
+  });
+};
+
+export const calculateElapsedTimeWithDaysJs = (start: Date, end: Date) => {
+  const difference = end.getTime() - start.getTime();
+  console.log(difference);
+  const hours = Math.floor(difference / (1000 * 60 * 60));
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  const formattedString = `${String(hours).padStart(2, "0")}:${String(
+    minutes
+  ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  return formattedString;
+};
