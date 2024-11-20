@@ -1,6 +1,6 @@
 import axios from "axios";
 import { WORKOUTURL } from "../types/url-enums";
-import { WorkoutSession } from "../types/workout-type";
+import { WorkoutSession, WorkoutSessionVolume } from "../types/workout-type";
 
 class WorkoutAPIService {
   async getWorkoutWithExercises() {
@@ -26,6 +26,72 @@ class WorkoutAPIService {
       return await response.data.message;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async putStartWorkoutSession(payload: {
+    id: string | undefined;
+    startTime: Date;
+  }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/${WORKOUTURL.PUT_STARTWORKOUTSESSION}`,
+        payload,
+        config
+      );
+      return response.data.message;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async putEndWorkoutSession(payload: {
+    id: string | undefined;
+    endTime: Date;
+  }): Promise<{ workoutSessionId: string } | undefined> {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/${WORKOUTURL.PUT_ENDWORKOUTSESSION}`,
+        payload,
+        config
+      );
+      return response.data.updatedSession;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async putUpdateWorkoutSession(
+    id: string | undefined,
+    payload: WorkoutSessionVolume
+  ) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/${WORKOUTURL.PUT_UPDATEWORKOUTSESSION}/${id}`,
+        payload,
+        config
+      );
+      return response.data;
+    } catch (err) {
+      console.log(err);
     }
   }
 }

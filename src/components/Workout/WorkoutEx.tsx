@@ -46,6 +46,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
   loadingExercises,
   autocompleteRefCall,
   handleSaveWorkout,
+  handleSearchedExercises,
 }) => {
   const categories = Object.values(ExerciseCategory);
   const [exerciseVolumes, setExerciseVolumes] = useState<ExerciseVolume[]>([]);
@@ -295,6 +296,7 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
               onChange={(e: React.SyntheticEvent, newValue) =>
                 setExerciseName(newValue?.name)
               }
+              onInputChange={handleSearchedExercises}
               getOptionLabel={(option) => {
                 return option.name;
               }}

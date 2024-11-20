@@ -7,12 +7,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Avatar } from "@mui/material";
-
+import { toJS } from "mobx";
 interface ExTableProps {
   exercises: any[];
 }
 
 const WorkoutExTable: React.FC<ExTableProps> = ({ exercises }) => {
+  console.log("exercises", toJS(exercises));
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="a dense table">
@@ -37,9 +38,9 @@ const WorkoutExTable: React.FC<ExTableProps> = ({ exercises }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {exercises.map((exercise) => (
+          {exercises.map((exercise, index) => (
             <TableRow
-              key={exercise.name}
+              key={index}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
                 "&:nth-of-type(odd)": { backgroundColor: "#FAFAFA" },

@@ -55,6 +55,10 @@ export interface CreateNewWorkoutModalProps {
       }>
     >
   ) => void;
+  handleSearchedExercises: (
+    e: React.SyntheticEvent<Element, Event>,
+    newValue: string
+  ) => void;
 }
 
 export interface WorkoutPresenterProps {
@@ -63,4 +67,11 @@ export interface WorkoutPresenterProps {
   mainStyle: { [key: string]: any };
   workoutListStyle: { [key: string]: any };
   workoutExStyle: { [key: string]: any };
+}
+
+export interface WorkoutSessionVolume {
+  totalReps: number;
+  totalSets: number;
+  totalWeight: number;
+  totalRest: number;
 }

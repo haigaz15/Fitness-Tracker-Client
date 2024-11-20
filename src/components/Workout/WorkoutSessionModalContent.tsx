@@ -11,23 +11,28 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { mockItems } from "../../utils/generator";
-import { ExerciseOnWorkoutWithError } from "../../types/exercise-types";
+import {
+  ExerciseOnWorkout,
+  ExerciseOnWorkoutWithError,
+} from "../../types/exercise-types";
 import ExTimeField from "../Date/ExTimeField";
 import { Dayjs } from "dayjs";
 import { calculateElapsedTimeWithDaysJs } from "../../utils/helper";
+import workoutAPIServiceInstance from "../../services/WorkoutAPIService";
 
 const WorkoutSessionModalContent: React.FC<{
-  handleWorkoutSession: (
+  exercises: ExerciseOnWorkout[];
+  workoutId: string | undefined;
+  handleEndWorkoutSession: (
     logs: ExerciseOnWorkoutWithError[],
-    sessionTime: string
+    endTime: Date
   ) => void;
-}> = ({ handleWorkoutSession }) => {
+}> = ({ exercises, workoutId, handleEndWorkoutSession }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [exerciseLogs, setExerciseLogs] = useState<
     ExerciseOnWorkoutWithError[]
   >(
-    mockItems.map(
+    exercises.map(
       () =>
         ({
           reps: "",
@@ -47,6 +52,7 @@ const WorkoutSessionModalContent: React.FC<{
   const [timerIsRunning, setTimerIsRunning] = useState(true);
   const startTimeRef = useRef(Date.now());
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [startEndTimeError, setStartEndTimeError] = useState(false);
 
   const handleClickTimeManually = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -57,13 +63,15 @@ const WorkoutSessionModalContent: React.FC<{
   };
 
   const handleSaveTimeManually = () => {
-    setTimerIsRunning(false);
-    console.log("startTime", startTime?.toDate());
-    console.log("endTime", endTime?.toDate());
     if (startTime && endTime) {
-      setManualTime(true);
+      if (endTime.diff(startTime) < 0) {
+        setStartEndTimeError(true);
+      } else {
+        setTimerIsRunning(false);
+        setManualTime(true);
+        setAnchorEl(null);
+      }
     }
-    setAnchorEl(null);
   };
 
   const openManualTime = Boolean(anchorEl);
@@ -75,6 +83,11 @@ const WorkoutSessionModalContent: React.FC<{
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleFinishWorkout = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setTimerIsRunning(false);
   };
 
   const handleRepsChange = (
@@ -138,6 +151,17 @@ const WorkoutSessionModalContent: React.FC<{
   const handleEndTimeChange = (newValue: Dayjs | null) => {
     setEndTime(newValue);
   };
+
+  useEffect(() => {
+    if (startTime) {
+      workoutAPIServiceInstance
+        .putStartWorkoutSession({
+          id: workoutId,
+          startTime: startTime.toDate(),
+        })
+        .then((result) => console.log(result));
+    }
+  }, [startTime, workoutId]);
 
   return (
     <Paper
@@ -226,16 +250,22 @@ const WorkoutSessionModalContent: React.FC<{
               >
                 Save
               </Button>
+              {startEndTimeError && (
+                <Typography variant="subtitle2">
+                  End time is before Start time are you sure you did a negative
+                  workout?🤔😆
+                </Typography>
+              )}
             </Box>
           </Popover>
         </Box>
       </Box>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {mockItems.map((step, index) => (
+        {exercises.map((step, index) => (
           <Step key={step.name}>
             <StepLabel
               optional={
-                index === mockItems.length - 1 ? (
+                index === exercises.length - 1 ? (
                   <Typography variant="caption">Last step</Typography>
                 ) : null
               }
@@ -336,10 +366,14 @@ const WorkoutSessionModalContent: React.FC<{
               <Box sx={{ mb: 2 }}>
                 <Button
                   variant="contained"
-                  onClick={handleNext}
+                  onClick={
+                    !(index === exercises.length - 1)
+                      ? handleNext
+                      : handleFinishWorkout
+                  }
                   sx={{ mt: 1, mr: 1 }}
                 >
-                  {index === mockItems.length - 1 ? "Finish" : "Continue"}
+                  {index === exercises.length - 1 ? "Finish" : "Continue"}
                 </Button>
                 <Button
                   disabled={index === 0}
@@ -353,23 +387,16 @@ const WorkoutSessionModalContent: React.FC<{
           </Step>
         ))}
       </Stepper>
-      {activeStep === mockItems.length && (
+      {activeStep === exercises.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>
             All exercises are completed - you&apos;re finished
           </Typography>
           <Button
             onClick={() =>
-              handleWorkoutSession(
+              handleEndWorkoutSession(
                 exerciseLogs,
-                manualTime && startTime && endTime
-                  ? calculateElapsedTimeWithDaysJs(
-                      startTime.toDate(),
-                      endTime.toDate()
-                    )
-                  : `${String(hours).padStart(2, "0")}:${String(
-                      minutes
-                    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
+                manualTime && endTime ? endTime.toDate() : new Date()
               )
             }
             sx={{ mt: 1, mr: 1 }}

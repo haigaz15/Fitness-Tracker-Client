@@ -15,12 +15,13 @@ import {
   volumeTotalCount,
 } from "../../utils/helper";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { WorkoutSession } from "../../types/workout-type";
+import { WorkoutSession, WorkoutSessionVolume } from "../../types/workout-type";
 import { v4 as uuidv4 } from "uuid";
 import { useStore } from "../../hooks/userStore";
 import { observer } from "mobx-react";
 import Loading from "../../components/Loading/Loading";
 import { Dayjs } from "dayjs";
+import workoutAPIServiceInstance from "../../services/WorkoutAPIService";
 const mainStyle = {
   display: "flex",
   marginTop: "76px",
@@ -42,13 +43,31 @@ const WorkoutContainer = observer(() => {
   const [hasMore, setHasMore] = useState(false);
   const [workoutCreator, setWorkoutCreator] = useState(true);
   const [workoutSessionModalOpen, setWorkoutSessionModalOpen] = useState(false);
+  const [searchedExercises, setSearchedExercises] = useState<
+    ExerciseListType[]
+  >([]);
+  const [searchingForExercises, setSearchingForExercises] = useState(false);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const { workoutStore } = useStore();
 
-  const handleWorkoutSession = (
+  const handleStartWorkoutSession = (
+    workoutId: string | undefined,
+    startTime: Date
+  ) => {
+    setWorkoutSessionModalOpen(true);
+    workoutAPIServiceInstance
+      .putStartWorkoutSession({
+        id: workoutId,
+        startTime,
+      })
+      .then((result) => console.log(result));
+  };
+
+  const handleEndWorkoutSession = (
     logs: ExerciseOnWorkoutWithError[],
-    sessionTime: string
+    endTime: Date
   ) => {
     const volume = logs.map((log) => {
       return !log.error
@@ -73,13 +92,12 @@ const WorkoutContainer = observer(() => {
             weight: 0,
           };
     });
-    console.log("volume", volume);
     const totalVolume = {
       totalReps: 0,
       totalSets: 0,
       totalWeight: 0,
       totalRest: 0,
-    };
+    } as WorkoutSessionVolume;
     totalVolume.totalSets = volume.reduce((acc: number, curr) => {
       return acc + curr.sets;
     }, 0);
@@ -93,10 +111,18 @@ const WorkoutContainer = observer(() => {
       return acc + curr.weight;
     }, 0);
     setWorkoutSessionModalOpen(false);
-    console.log("totalVolume", totalVolume);
-    console.log("sessionTime:", sessionTime);
+    workoutAPIServiceInstance
+      .putEndWorkoutSession({
+        id: id,
+        endTime: endTime,
+      })
+      .then((result) => {
+        console.log(result?.workoutSessionId);
+        workoutAPIServiceInstance
+          .putUpdateWorkoutSession(result?.workoutSessionId, totalVolume)
+          .then((result) => console.log(result));
+      });
   };
-
   const handleSaveWorkout = (
     workoutName: string,
     workoutDate: Dayjs | null,
@@ -180,6 +206,29 @@ const WorkoutContainer = observer(() => {
     fetchExercises();
   }, [currentPage]);
 
+  const handleSearchedExercises = (
+    e: React.SyntheticEvent<Element, Event>,
+    newValue: string
+  ) => {
+    if (newValue === "") {
+      setSearchingForExercises(false);
+    } else {
+      setSearchingForExercises(true);
+      const fetchExercises = async () => {
+        try {
+          setLoadingExercises(true);
+          const newExercises = await exerciseAPIServiceInstance.getExercises(
+            newValue
+          );
+          setSearchedExercises(newExercises);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchExercises();
+    }
+  };
+
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <WorkoutPresenter
@@ -193,12 +242,13 @@ const WorkoutContainer = observer(() => {
         renderWorkoutListItem={() =>
           workoutCreator ? (
             <WorkoutEx
-              exercises={exercises}
+              exercises={searchingForExercises ? searchedExercises : exercises}
               autoCompleteOpen={autoCompleteOpen}
               setAutoCompleteOpen={setAutoCompleteOpen}
               autocompleteRefCall={autocompleteRefCall}
               loadingExercises={loadingExercises}
               handleSaveWorkout={handleSaveWorkout}
+              handleSearchedExercises={handleSearchedExercises}
             />
           ) : workoutStore.loading ? (
             <Loading />
@@ -207,8 +257,9 @@ const WorkoutContainer = observer(() => {
               context={[
                 workoutStore.workoutSessions,
                 workoutSessionModalOpen,
+                handleStartWorkoutSession,
                 setWorkoutSessionModalOpen,
-                handleWorkoutSession,
+                handleEndWorkoutSession,
               ]}
             />
           )

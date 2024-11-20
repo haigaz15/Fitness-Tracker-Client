@@ -1,7 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import TextArea from "../TextArea/TextArea";
 import { useOutletContext, useParams } from "react-router-dom";
-import { mockItems } from "../../utils/generator";
 import WorkoutExTable from "./WorkoutExTable";
 import ExModal from "../modal/ExModal";
 import WorkoutSessionModalContent from "./WorkoutSessionModalContent";
@@ -12,13 +11,15 @@ const WorkoutListItems = () => {
   const [
     workoutSessions,
     workoutSessionModalOpen,
+    handleStartWorkoutSession,
     setWorkoutSessionModalOpen,
-    handleWorkoutSession,
+    handleEndWorkoutSession,
   ]: [
     WorkoutSession[],
     boolean,
+    (id: string | undefined, startTime: Date) => void,
     React.Dispatch<React.SetStateAction<boolean>>,
-    (logs: ExerciseOnWorkoutWithError[], sessionTime: string) => void
+    (logs: ExerciseOnWorkoutWithError[], endTime: Date) => void
   ] = useOutletContext();
   const items = workoutSessions.filter(
     (workoutSession: WorkoutSession) => workoutSession.id === id
@@ -65,7 +66,7 @@ const WorkoutListItems = () => {
         </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button onClick={() => setWorkoutSessionModalOpen(true)}>
+        <Button onClick={() => handleStartWorkoutSession(id, new Date())}>
           Start Workout Session
         </Button>
         <Button>Add Workout to a Program</Button>
@@ -78,7 +79,7 @@ const WorkoutListItems = () => {
           overflowY: "auto",
         }}
       >
-        <WorkoutExTable exercises={mockItems} />
+        <WorkoutExTable exercises={items[0].exercises} />
       </Box>
 
       <Box sx={{ marginTop: 2 }}>
@@ -92,7 +93,9 @@ const WorkoutListItems = () => {
         handleClose={() => setWorkoutSessionModalOpen(false)}
         renderModalContent={() => (
           <WorkoutSessionModalContent
-            handleWorkoutSession={handleWorkoutSession}
+            exercises={items[0].exercises}
+            workoutId={id}
+            handleEndWorkoutSession={handleEndWorkoutSession}
           />
         )}
       />
