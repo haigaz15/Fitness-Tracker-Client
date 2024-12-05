@@ -1,6 +1,7 @@
 import axios from "axios";
 import { WORKOUTURL } from "../types/url-enums";
 import { WorkoutSession, WorkoutSessionVolume } from "../types/workout-type";
+import { ExerciseOnWorkoutUpdate } from "../types/exercise-types";
 
 class WorkoutAPIService {
   async getWorkoutWithExercises() {
@@ -90,6 +91,28 @@ class WorkoutAPIService {
         config
       );
       return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async putUpdateWorkoutExercise(
+    workoutId: string,
+    payload: ExerciseOnWorkoutUpdate
+  ) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/${WORKOUTURL.PUT_UPDATEWOKROUT_EXERCISE}/${workoutId}`,
+        payload,
+        config
+      );
+      return response;
     } catch (err) {
       console.log(err);
     }

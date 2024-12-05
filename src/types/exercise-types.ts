@@ -47,6 +47,13 @@ export interface ExerciseListType {
   category: ExerciseCategory;
   difficulty: ExerciseDifficulty;
 }
+export interface ExerciseOnWorkoutUpdate {
+  name: string;
+  set: number;
+  reps: string;
+  rest: string;
+  weight: string;
+}
 export interface ExerciseCardProps {
   imageUrl?: string;
   name: string;

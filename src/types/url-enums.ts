@@ -7,6 +7,7 @@ export enum WORKOUTURL {
   PUT_STARTWORKOUTSESSION = "workout-session/start",
   PUT_ENDWORKOUTSESSION = "workout-session/end",
   PUT_UPDATEWORKOUTSESSION = "workout-session",
+  PUT_UPDATEWOKROUT_EXERCISE = "workout/workout-exercise",
 }
 
 export enum STATURL {

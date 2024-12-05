@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { Button, Box } from "@mui/material";
-import { ExerciseCardProps } from "../../types/exercise-types";
+import {
+  ExerciseCardProps,
+  ExerciseOnWorkoutUpdate,
+  ExerciseVolume,
+} from "../../types/exercise-types";
 import ExCard from "../Card/ExCard";
 import ExModal from "../modal/ExModal";
 import ExerciseContent from "./ExerciseContent";
 import ExerciseModal from "./ExerciseModal";
 import AddWorkoutForm from "../AddWorkoutForm/AddWorkoutForm";
+import { arrayWorkoutVolumeToDashedWorkoutVolume } from "../../utils/helper";
+import { useStore } from "../../hooks/userStore";
+import { observer } from "mobx-react";
 
 const parentStyle = {
   width: 300,
@@ -23,8 +30,36 @@ const Exercise: React.FC<ExerciseCardProps> = function ({
 }) {
   const [openExerciseModal, setOpenExerciseModal] = useState(false);
   const [openAddWorkoutModal, setAddWorkoutModal] = useState(false);
+  const { workoutStore } = useStore();
   const handleExerciseModalClose = () => {
     setOpenExerciseModal(false);
+  };
+
+  const handleSaveExerciseToWorkout = (
+    workoutId: string,
+    exerciseVolumes: ExerciseVolume[]
+  ) => {
+    const set = exerciseVolumes.map(
+      (exerciseVolume) => exerciseVolume.set
+    ).length;
+    const reps = arrayWorkoutVolumeToDashedWorkoutVolume(
+      exerciseVolumes.map((exerciseVolume) => exerciseVolume.reps)
+    );
+    const rest = arrayWorkoutVolumeToDashedWorkoutVolume(
+      exerciseVolumes.map((exerciseVolume) => exerciseVolume.rest)
+    );
+    const weight = arrayWorkoutVolumeToDashedWorkoutVolume(
+      exerciseVolumes.map((exerciseVolume) => exerciseVolume.weight)
+    );
+    setAddWorkoutModal(false);
+    const payload: ExerciseOnWorkoutUpdate = {
+      name,
+      set,
+      reps,
+      rest,
+      weight,
+    };
+    workoutStore.updateWorkoutExercise(workoutId, payload);
   };
 
   return (
@@ -68,10 +103,16 @@ const Exercise: React.FC<ExerciseCardProps> = function ({
       <ExModal
         open={openAddWorkoutModal}
         handleClose={() => setAddWorkoutModal(false)}
-        renderModalContent={() => <AddWorkoutForm choosenExercise={name} />}
+        renderModalContent={() => (
+          <AddWorkoutForm
+            choosenExercise={name}
+            setAddWorkoutModal={setAddWorkoutModal}
+            handleSaveExerciseToWorkout={handleSaveExerciseToWorkout}
+          />
+        )}
       />
     </>
   );
 };
 
-export default Exercise;
+export default observer(Exercise);

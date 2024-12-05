@@ -12,22 +12,33 @@ import {
   handleRestChange,
   handleWeightChange,
 } from "../../utils/handlers";
-
-const AddWorkoutList = () => {
-  const { workoutStore } = useStore();
-  return workoutStore.workoutSessions.map((workout) => (
-    <MenuItem
-      key={new Date(workout.workoutDate).toISOString()}
-      value={workout.name}
-    >
-      {workout.name}
-    </MenuItem>
-  ));
-};
-
-const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
+interface AddWorkoutFormProps {
+  choosenExercise: string;
+  handleSaveExerciseToWorkout: (
+    workoutId: string,
+    exerciseVolumes: ExerciseVolume[]
+  ) => void;
+  setAddWorkoutModal: (value: React.SetStateAction<boolean>) => void;
+}
+const AddWorkoutForm: React.FC<AddWorkoutFormProps> = ({
   choosenExercise,
+  handleSaveExerciseToWorkout,
+  setAddWorkoutModal,
 }) => {
+  const { workoutStore } = useStore();
+  const [workoutId, setWorkoutId] = useState("");
+  const AddWorkoutList = () => {
+    return workoutStore.workoutSessions.map((workout) => (
+      <MenuItem
+        key={new Date(workout.workoutDate).toISOString()}
+        value={workout.name}
+        onClick={() => setWorkoutId(workout.id)}
+      >
+        {workout.name}
+      </MenuItem>
+    ));
+  };
+
   const [exerciseVolumes, setExerciseVolumes] = useState<ExerciseVolume[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const handleWorkoutVolumeAdition = () => {
@@ -143,7 +154,9 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
           }}
         >
           <SaveButton
-            handleClick={() => console.log("saved")}
+            handleClick={() =>
+              handleSaveExerciseToWorkout(workoutId, exerciseVolumes)
+            }
             style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}
             buttonTitle="save"
           />
@@ -158,7 +171,7 @@ const AddWorkoutForm: React.FC<{ choosenExercise: string }> = ({
           }}
         >
           <CancelButton
-            handleClick={() => console.log("canceled")}
+            handleClick={() => setAddWorkoutModal(false)}
             style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}
             buttonTitle="Cancel"
           />
