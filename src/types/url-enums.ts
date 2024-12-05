@@ -8,3 +8,7 @@ export enum WORKOUTURL {
   PUT_ENDWORKOUTSESSION = "workout-session/end",
   PUT_UPDATEWORKOUTSESSION = "workout-session",
 }
+
+export enum STATURL {
+  GET_CALORRIES_PER_SESSION = "workout-stat/calories",
+}

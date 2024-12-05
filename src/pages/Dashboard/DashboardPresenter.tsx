@@ -1,33 +1,31 @@
-const mainDivStyle = {
-  display: "flex",
-  marginTop: "80px",
-  width: "100%",
-};
-const firstCDivStyle = {
-  flex: 4,
-};
+import { Box, Toolbar } from "@mui/material";
 
-const secondCDivStyle = {
-  flex: 18,
-  height: "100vh",
-};
-const horizontalLineStyle = {
-  width: "11px",
-  margin: "0 -5px",
-  borderLeft: "1px solid rgba(255, 255, 255, 0)",
-  cursor: "col-resize",
-};
-const DashbaordPresenter: React.FC<{ children: React.ReactNode[] }> = ({
-  children,
+interface dashboardPresenterProps {
+  renderHeader: (styles: { [key: string]: any }) => React.ReactNode;
+  renderMiddleScreen: (styles: { [key: string]: any }) => React.ReactNode;
+  renderLowerScreen: (styles: { [key: string]: any }) => React.ReactNode;
+  styles: {
+    container: { [key: string]: any };
+    header: { [key: string]: any };
+    middleScreen: { [key: string]: any };
+    lowerScreen: { [key: string]: any };
+  };
+}
+
+const DashboardPresenter: React.FC<dashboardPresenterProps> = ({
+  renderHeader,
+  renderMiddleScreen,
+  renderLowerScreen,
+  styles,
 }) => {
-  const [left, right] = children;
   return (
-    <div style={mainDivStyle}>
-      <div style={firstCDivStyle}>{left}</div>
-      <span style={horizontalLineStyle}></span>
-      <div style={secondCDivStyle}>{right}</div>
-    </div>
+    <Box sx={{ ...styles.container }}>
+      <Toolbar />
+      {renderHeader && renderHeader(styles.header)}
+      {renderMiddleScreen && renderMiddleScreen(styles.middleScreen)}
+      {renderLowerScreen && renderLowerScreen(styles.lowerScreen)}
+    </Box>
   );
 };
 
-export default DashbaordPresenter;
+export default DashboardPresenter;
