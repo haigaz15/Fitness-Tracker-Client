@@ -1,8 +1,13 @@
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./SearchBar.css";
-
-const SearchBar = function () {
+interface SearchBarProps {
+  handleSearchedExercises: (
+    e: React.SyntheticEvent<Element, Event>,
+    newValue: string
+  ) => void;
+}
+const SearchBar: React.FC<SearchBarProps> = ({ handleSearchedExercises }) => {
   return (
     <div className="search-bar">
       <Paper
@@ -13,6 +18,7 @@ const SearchBar = function () {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search"
           inputProps={{ "aria-label": "search google maps" }}
+          onChange={(e) => handleSearchedExercises(e, e.target.value)}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />

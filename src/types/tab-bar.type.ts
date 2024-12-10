@@ -1,5 +1,5 @@
 export interface TapBarExerciseListProps {
-  searchBar: React.ComponentType;
+  renderSearchBar: () => React.ReactNode;
   tabValue: string;
   handleTabValueChange: (event: React.SyntheticEvent, newValue: string) => void;
 }

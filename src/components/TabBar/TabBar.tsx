@@ -3,7 +3,7 @@ import { Tabs, Tab, Box, Toolbar } from "@mui/material";
 import { TapBarExerciseListProps } from "../../types/tab-bar.type";
 
 const TabBar: React.FC<TapBarExerciseListProps> = ({
-  searchBar: SearchBar,
+  renderSearchBar,
   tabValue,
   handleTabValueChange,
 }) => {
@@ -29,7 +29,7 @@ const TabBar: React.FC<TapBarExerciseListProps> = ({
         <Tab label="Dumbbell" value="dumbbell" />
         <Tab label="Kettlebell" value="kettle" />
         <Tab label="Bodyweight" value="bodyweight" />
-        <SearchBar />
+        {renderSearchBar && renderSearchBar()}
       </Tabs>
     </Box>
   );

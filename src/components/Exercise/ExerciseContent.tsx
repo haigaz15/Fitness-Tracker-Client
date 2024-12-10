@@ -7,8 +7,8 @@ const ExerciseContent: React.FC<ExerciseCardProps> = ({
 }) => {
   return (
     <>
-      <Typography gutterBottom variant="h5" component="div">
-        {name}
+      <Typography gutterBottom variant="h6" component="div">
+        {name.length > 23 ? name.slice(0, 23) + " ..." : name}
       </Typography>
       <Typography variant="body2" color="text.secondary">
         {description.length > 150
