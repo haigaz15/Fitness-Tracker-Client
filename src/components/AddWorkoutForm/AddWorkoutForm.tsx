@@ -11,7 +11,7 @@ import {
   handleRepsChange,
   handleRestChange,
   handleWeightChange,
-} from "../../utils/handlers";
+} from "../../handlers/handlers";
 interface AddWorkoutFormProps {
   choosenExercise: string;
   handleSaveExerciseToWorkout: (

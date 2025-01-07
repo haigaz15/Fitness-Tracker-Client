@@ -20,7 +20,7 @@ import {
   handleRepsChange,
   handleRestChange,
   handleWeightChange,
-} from "../../utils/handlers";
+} from "../../handlers/handlers";
 import ExerciseVolumeAdder from "../Exercise/ExerciseVolumeAdder";
 import RemoveWorkoutVolumeButton from "../Button/RemoveWorkoutVolumeButton";
 import AddWorkoutVolumeButton from "../Button/AddWorkoutVolumeButton";

@@ -17,7 +17,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const pages = ["User Profile"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Account", "Logout"];
 
 const Bar: React.FC = function () {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -113,7 +113,7 @@ const Bar: React.FC = function () {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -124,6 +124,7 @@ const Bar: React.FC = function () {
               color: "inherit",
               textDecoration: "none",
             }}
+            onClick={HandleHomeClicked}
           >
             LOGO
           </Typography>

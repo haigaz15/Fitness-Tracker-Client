@@ -8,12 +8,18 @@ import Home from "./pages/Home/Home";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import WorkoutContainer from "./pages/Workout/WorkoutContainer";
 import WorkoutListItems from "./components/Workout/WorkoutListItems";
+import ProgramContainer from "./pages/Programs/ProgramContainer";
+import SignUp from "./pages/Log/SignUp";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/signup",
+      element: <SignUp />,
     },
     {
       path: "/user-profile",
@@ -31,6 +37,7 @@ function App() {
           children: [{ path: ":id", element: <WorkoutListItems /> }],
         },
         { path: "analytics", element: <Analytics /> },
+        { path: "programs", element: <ProgramContainer /> },
       ],
     },
   ]);

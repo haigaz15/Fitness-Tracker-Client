@@ -13,6 +13,7 @@ const UserProfileContainer: React.FC = () => {
             Navigations.DASHBOARD,
             Navigations.EXERCISELIBRARY,
             Navigations.WORKOUTS,
+            Navigations.PROGRAMS,
             Navigations.ANALYTICS,
           ]}
         />

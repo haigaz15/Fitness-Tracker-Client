@@ -1,4 +1,10 @@
-import { Button, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import ExBarChart from "../../components/Charts/ExBarChart";
 import DashboardHeader from "../../components/DashboardScreens/DashboardHeader";
 import DashboardLower from "../../components/DashboardScreens/DashboardLower";
@@ -97,7 +103,12 @@ const DashboardContainer: React.FC = () => {
             </Button>
           )}
           rightCardContent={() => (
-            <ExGaugeChart gaugePercentage={gaugePercentage} />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography>Energy Level</Typography>
+                <ExGaugeChart gaugePercentage={gaugePercentage} />
+              </Box>
+            </Box>
           )}
         />
       )}
