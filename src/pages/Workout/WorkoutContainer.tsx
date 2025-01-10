@@ -153,8 +153,6 @@ const WorkoutContainer = observer(() => {
     navigate(`${lastWorkoutSessionId}`);
   };
 
-  useEffect(() => {}, [workoutStore.loading]);
-
   useEffect(() => {
     if (!id) setWorkoutCreator(true);
   }, [id]);
