@@ -6,11 +6,11 @@ const CancelButton: React.FC<ButtonProps> = ({
   handleClick,
   style,
   buttonTitle,
+  ...otherProps
 }) => {
   return (
     <Button
-      variant="contained"
-      color="primary"
+      {...otherProps}
       startIcon={<CancelIcon />}
       onClick={handleClick}
       // style={{ borderRadius: "8px", padding: "10px 20px", width: "100%" }}

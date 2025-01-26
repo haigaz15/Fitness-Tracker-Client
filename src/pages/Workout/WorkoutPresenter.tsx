@@ -11,7 +11,7 @@ const WorkoutPresenter: React.FC<WorkoutPresenterProps> = ({
   return (
     <Box sx={mainStyle}>
       <Box sx={workoutListStyle}>{renderWorkoutList()}</Box>
-      <Divider orientation="vertical" flexItem sx={{ cursor: "col-resize" }} />
+      <Divider orientation="vertical" flexItem />
       <Box sx={workoutExStyle}>{renderWorkoutListItem()}</Box>
     </Box>
   );

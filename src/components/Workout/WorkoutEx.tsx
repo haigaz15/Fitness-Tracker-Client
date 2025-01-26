@@ -3,11 +3,15 @@ import {
   Autocomplete,
   Box,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   Checkbox,
   CircularProgress,
   Divider,
   FormControlLabel,
   Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 import Date from "../Date/Date";
@@ -38,6 +42,7 @@ import WorkoutExercise from "./WorkoutExercise";
 import ThinTextField from "../Textfield/ThinTextfield";
 import TextArea from "../TextArea/TextArea";
 import dayjs, { Dayjs } from "dayjs";
+import TextEditToolbar from "../Toolbar/TextEditToolbar";
 
 const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
   exercises,
@@ -175,307 +180,340 @@ const WorkoutEx: React.FC<CreateNewWorkoutModalProps> = ({
 
   return (
     <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "90%",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            height: "50px",
-          }}
-        >
+      <Card sx={{ marginTop: 2 }}>
+        <CardContent>
           <Box
-            flexGrow={1}
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
+              height: "90%",
             }}
           >
-            <Typography
-              textAlign="left"
-              variant="h5"
+            <Box
               sx={{
-                background: "linear-gradient(90deg, #333333, #555555, #777777)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: "bold",
+                display: "flex",
+                width: "100%",
+                height: "50px",
               }}
             >
-              Create Your Workout
+              <Box
+                flexGrow={1}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography
+                  textAlign="left"
+                  variant="h5"
+                  sx={{
+                    background:
+                      "linear-gradient(90deg, #333333, #555555, #777777)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Create Your Workout
+                </Typography>
+              </Box>
+              <Button
+                variant="text"
+                sx={{ borderBottom: "solid", borderBottomColor: "primary" }}
+                onClick={() =>
+                  handleSaveWorkout(
+                    workoutForum.name,
+                    workoutForum.date,
+                    workoutForum.notes,
+                    workoutExercises,
+                    setWorkoutExercises,
+                    setWorkoutForum
+                  )
+                }
+              >
+                Save Workout <SaveIcon sx={{ marginLeft: 1 }} />
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                marginTop: 2,
+              }}
+            >
+              <ThinTextField
+                label="Enter your Workout name"
+                fullWidth
+                value={workoutForum.name}
+                onChange={(
+                  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                ) => {
+                  const newForum = { ...workoutForum };
+                  newForum.name = e.target.value;
+                  setWorkoutForum(newForum);
+                }}
+              />
+              <Box>
+                <Date
+                  value={workoutForum.date}
+                  onChange={(newValue) => {
+                    const newForum = { ...workoutForum };
+                    newForum.date = newValue || dayjs();
+                    setWorkoutForum(newForum);
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ marginTop: 2 }}>
+        <CardContent>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" textAlign="left">
+              Workout Notes
+            </Typography>{" "}
+            <Typography variant="body2" textAlign="left">
+              Add your personal workout notes
             </Typography>
           </Box>
-          <Button
-            variant="text"
-            sx={{ borderBottom: "solid", borderBottomColor: "primary" }}
-            onClick={() =>
-              handleSaveWorkout(
-                workoutForum.name,
-                workoutForum.date,
-                workoutForum.notes,
-                workoutExercises,
-                setWorkoutExercises,
-                setWorkoutForum
-              )
-            }
-          >
-            Save Workout <SaveIcon sx={{ marginLeft: 1 }} />
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            marginTop: 2,
-          }}
-        >
-          <ThinTextField
-            label="Enter your Workout name"
-            fullWidth
-            sx={{ marginRight: 2 }}
-            value={workoutForum.name}
-            onChange={(
-              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => {
-              const newForum = { ...workoutForum };
-              newForum.name = e.target.value;
-              setWorkoutForum(newForum);
-            }}
-          />
-          <Box>
-            <Date
-              value={workoutForum.date}
-              onChange={(newValue) => {
+          <Divider />
+          <Stack spacing={2} sx={{ my: 1 }}>
+            <TextEditToolbar />
+            <TextArea
+              value={workoutForum.notes}
+              rows={3}
+              onChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
                 const newForum = { ...workoutForum };
-                newForum.date = newValue || dayjs();
+                newForum.notes = e.target.value;
                 setWorkoutForum(newForum);
               }}
             />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: 2,
-          }}
-        >
-          <Typography variant="h6">Choose category </Typography>
-          {/* Category Checkboxes */}
+          </Stack>
+        </CardContent>
+      </Card>
+      <Card sx={{ marginTop: 2 }}>
+        <CardContent>
           <Box
             sx={{
               display: "flex",
-              justifyContent: "start",
-              gap: 1,
-              marginTop: 1,
+              flexDirection: "column",
+              marginTop: 2,
             }}
           >
-            {categories.map((category) => (
-              <FormControlLabel
-                key={category}
-                control={
-                  <Checkbox
-                    checked={selectedCategories.includes(category)}
-                    onChange={() => handleCategoryChange(category)}
-                  />
-                }
-                label={category}
-              />
-            ))}
-          </Box>
-          <Box sx={{ marginTop: 2 }}>
-            <Autocomplete
-              options={exercises}
-              open={autoCompleteOpen}
-              onOpen={() => setAutoCompleteOpen(true)}
-              onClose={() => setAutoCompleteOpen(false)}
-              onChange={(e: React.SyntheticEvent, newValue) =>
-                setExerciseName(newValue?.name)
-              }
-              onInputChange={handleSearchedExercises}
-              getOptionLabel={(option) => {
-                return option.name;
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6" textAlign="left">
+                Exercise Creator
+              </Typography>
+              <Typography variant="body2" textAlign="left">
+                Choose your exercise and add the desired volume
+              </Typography>
+            </Box>
+            <Divider />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "start",
+                gap: 1,
+                marginTop: 1,
               }}
-              loading={loadingExercises}
-              renderInput={(params) => (
-                <ThinTextField
-                  {...params}
-                  label="Add Exercise"
-                  fullWidth
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setExerciseName(e.target.value)
+            >
+              {categories.map((category) => (
+                <FormControlLabel
+                  key={category}
+                  control={
+                    <Checkbox
+                      checked={selectedCategories.includes(category)}
+                      onChange={() => handleCategoryChange(category)}
+                    />
                   }
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: (
-                      <>
-                        {loadingExercises ? (
-                          <CircularProgress
-                            color="primary"
-                            size={28}
-                            style={{ marginRight: 10 }}
-                          />
-                        ) : null}
-                        {params.InputProps.endAdornment}
-                      </>
-                    ),
-                  }}
+                  label={category}
                 />
-              )}
-              renderOption={(props, option, { index }) =>
-                index === exercises.length - 1 ? (
-                  <Paper
-                    {...props}
-                    onScroll={handleScroll}
-                    sx={{ p: 2, width: "100%", overflowY: "auto" }}
-                    ref={autocompleteRefCall}
-                    component="article"
-                  >
-                    <Box display="flex" flexDirection="column">
-                      <Typography variant="h6">{option.name}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Primary Muscle: {option.primaryMuscle}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Secondary Muscles: {option.secondaryMuscles}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Difficulty: {option.difficulty}
-                      </Typography>
-                    </Box>
-                  </Paper>
-                ) : (
-                  <Paper
-                    {...props}
-                    onScroll={handleScroll}
-                    sx={{ p: 2, width: "100%", overflowY: "auto" }}
-                    component="article"
-                  >
-                    <Box display="flex" flexDirection="column">
-                      <Typography variant="h6">{option.name}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Primary Muscle: {option.primaryMuscle}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Secondary Muscles: {option.secondaryMuscles}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Difficulty: {option.difficulty}
-                      </Typography>
-                    </Box>
-                  </Paper>
-                )
-              }
-            />
+              ))}
+            </Box>
+            <Box sx={{ marginTop: 2 }}>
+              <Autocomplete
+                options={exercises}
+                open={autoCompleteOpen}
+                onOpen={() => setAutoCompleteOpen(true)}
+                onClose={() => setAutoCompleteOpen(false)}
+                onChange={(e: React.SyntheticEvent, newValue) =>
+                  setExerciseName(newValue?.name)
+                }
+                onInputChange={handleSearchedExercises}
+                getOptionLabel={(option) => {
+                  return option.name;
+                }}
+                loading={loadingExercises}
+                renderInput={(params) => (
+                  <ThinTextField
+                    {...params}
+                    label="Add Exercise"
+                    fullWidth
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setExerciseName(e.target.value)
+                    }
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loadingExercises ? (
+                            <CircularProgress
+                              color="primary"
+                              size={28}
+                              style={{ marginRight: 10 }}
+                            />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                renderOption={(props, option, { index }) =>
+                  index === exercises.length - 1 ? (
+                    <Paper
+                      {...props}
+                      onScroll={handleScroll}
+                      sx={{ p: 2, width: "100%", overflowY: "auto" }}
+                      ref={autocompleteRefCall}
+                      component="article"
+                    >
+                      <Box display="flex" flexDirection="column">
+                        <Typography variant="h6">{option.name}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Primary Muscle: {option.primaryMuscle}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Secondary Muscles: {option.secondaryMuscles}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Difficulty: {option.difficulty}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  ) : (
+                    <Paper
+                      {...props}
+                      onScroll={handleScroll}
+                      sx={{ p: 2, width: "100%", overflowY: "auto" }}
+                      component="article"
+                    >
+                      <Box display="flex" flexDirection="column">
+                        <Typography variant="h6">{option.name}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Primary Muscle: {option.primaryMuscle}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Secondary Muscles: {option.secondaryMuscles}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Difficulty: {option.difficulty}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  )
+                }
+              />
+            </Box>
           </Box>
-        </Box>
-        <Box sx={{ marginTop: 1 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            {" "}
-            <AddWorkoutVolumeButton
-              handleWorkoutVolume={handleWorkoutVolumeAdition}
-              style={{
-                borderRadius: "8px",
-                padding: "5px 10px",
-                width: "49%",
-                height: "32px",
-              }}
-            />{" "}
-            <RemoveWorkoutVolumeButton
-              handleWorkoutVolume={handleWorkoutVolumeRemoval}
-              style={{
-                borderRadius: "8px",
-                padding: "5px 10px",
-                width: "49%",
-                height: "32px",
-              }}
+          <Divider sx={{ mt: 3 }} />
+          <Box sx={{ marginTop: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              {" "}
+              <AddWorkoutVolumeButton
+                handleWorkoutVolume={handleWorkoutVolumeAdition}
+                style={{
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  width: "49%",
+                  height: "32px",
+                }}
+              />{" "}
+              <RemoveWorkoutVolumeButton
+                handleWorkoutVolume={handleWorkoutVolumeRemoval}
+                style={{
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  width: "49%",
+                  height: "32px",
+                }}
+              />
+            </Box>
+            <ExerciseVolumeAdder
+              exerciseVolumes={exerciseVolumes}
+              containerRef={containerRef}
+              handleRepsChange={handleRepsChange}
+              handleRestChange={handleRestChange}
+              handleWeightChange={handleWeightChange}
             />
+            <Divider sx={{ mt: 5 }} />
+            <CardActions sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+              <SaveButton
+                handleClick={handleExerciseVolumeSave}
+                color="primary"
+                style={{
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  width: "20%",
+                  height: "40px",
+                }}
+                buttonTitle="save exercise"
+              />
+              <CancelButton
+                handleClick={() => setExerciseVolumes([])}
+                style={{
+                  borderRadius: "8px",
+                  padding: "5px 10px",
+                  width: "20%",
+                  height: "40px",
+                }}
+                buttonTitle="Cancel"
+              />
+            </CardActions>
           </Box>
-          <ExerciseVolumeAdder
-            exerciseVolumes={exerciseVolumes}
-            containerRef={containerRef}
-            handleRepsChange={handleRepsChange}
-            handleRestChange={handleRestChange}
-            handleWeightChange={handleWeightChange}
-          />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 1,
-            }}
-          >
-            <SaveButton
-              handleClick={handleExerciseVolumeSave}
-              style={{
-                borderRadius: "8px",
-                padding: "5px 10px",
-                width: "49%",
-                height: "32px",
-              }}
-              buttonTitle="save exercise"
-            />
-            <CancelButton
-              handleClick={() => setExerciseVolumes([])}
-              style={{
-                borderRadius: "8px",
-                padding: "5px 10px",
-                width: "49%",
-                height: "32px",
-              }}
-              buttonTitle="Cancel"
-            />
-          </Box>
-        </Box>
-      </Box>
-      <Divider sx={{ marginTop: "2.5%" }} />
-      <Box
+        </CardContent>
+      </Card>
+      <Card
         sx={{
-          boxShadow: 1,
-          marginTop: 1,
-          padding: 1,
+          marginTop: 2,
         }}
       >
-        <Typography sx={{ marginTop: 2, padding: 1 }} variant="h6">
-          Added Exercises
-        </Typography>{" "}
-        {workoutExercises.map((workoutExercise, index) => (
-          <Box sx={{ display: "flex" }}>
-            <WorkoutExercise
-              exerciseIndex={index}
-              exercise={workoutExercise}
-              handleDeleteWorkoutExercise={() =>
-                handleDeleteWorkoutExercise(index)
-              }
-              handleEditWorkoutVolume={handleEditWorkoutVolume}
-              workoutVolumeExpantion={workoutVolumeExpantion}
-              handleExpantion={handleExpantion}
-              setWorkoutVolumeExpantion={setWorkoutVolumeExpantion}
-            />
+        <CardContent>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" textAlign="left">
+              Added Exercises
+            </Typography>{" "}
+            <Typography variant="body2" textAlign="left">
+              Your newly added exercises will appear bellow!
+            </Typography>
           </Box>
-        ))}
-      </Box>
-      <Divider />
-      <Box sx={{ boxShadow: 1, marginTop: 1, marginBottom: 1, maxHeight: 300 }}>
-        <Typography sx={{ marginTop: 2, padding: 1 }} variant="h6">
-          Workout Notes
-        </Typography>{" "}
-        <TextArea
-          label="add your workout notes"
-          value={workoutForum.notes}
-          onChange={(
-            e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-          ) => {
-            const newForum = { ...workoutForum };
-            newForum.notes = e.target.value;
-            setWorkoutForum(newForum);
-          }}
-        />
-      </Box>
+          <Divider />
+          <Stack
+            sx={{
+              my: 1,
+              width: "900px",
+            }}
+          >
+            {workoutExercises.map((workoutExercise, index) => (
+              <WorkoutExercise
+                exerciseIndex={index}
+                exercise={workoutExercise}
+                handleDeleteWorkoutExercise={() =>
+                  handleDeleteWorkoutExercise(index)
+                }
+                handleEditWorkoutVolume={handleEditWorkoutVolume}
+                workoutVolumeExpantion={workoutVolumeExpantion}
+                handleExpantion={handleExpantion}
+                setWorkoutVolumeExpantion={setWorkoutVolumeExpantion}
+              />
+            ))}
+          </Stack>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

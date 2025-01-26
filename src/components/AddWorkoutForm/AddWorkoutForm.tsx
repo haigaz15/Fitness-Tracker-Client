@@ -54,7 +54,11 @@ const AddWorkoutForm: React.FC<AddWorkoutFormProps> = ({
 
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      containerRef.current.scroll({
+        left: 0,
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }, [exerciseVolumes]);
   return (

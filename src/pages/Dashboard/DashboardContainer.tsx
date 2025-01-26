@@ -92,6 +92,7 @@ const DashboardContainer: React.FC = () => {
     height: isSmallScreen ? 180 : isMediumScreen ? 200 : 250,
   };
   const [gaugePercentage, setGaugePercentage] = useState<number>(10);
+
   return (
     <DashboardPresenter
       renderHeader={(styles: { [key: string]: any }) => (

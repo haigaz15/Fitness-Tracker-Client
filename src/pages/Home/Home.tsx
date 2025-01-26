@@ -14,7 +14,7 @@ const HomeContainer = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/sign-up")}
         >
           Sign Up
         </Button>

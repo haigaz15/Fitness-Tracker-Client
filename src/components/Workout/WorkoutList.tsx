@@ -31,6 +31,7 @@ const WorkoutList: React.FC<{
         </ListItemButton>
         {workoutSessions.map((workoutSession) => (
           <ListItemButton
+            key={workoutSession.id}
             onClick={() => {
               handleNavigation(workoutSession.id);
             }}

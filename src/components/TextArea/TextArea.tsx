@@ -15,15 +15,7 @@ const TextArea = (
       "variant"
     >
 ) => {
-  return (
-    <TextField
-      {...props}
-      multiline
-      rows={2} // Controls the height (number of visible rows)
-      variant="standard"
-      fullWidth
-    />
-  );
+  return <TextField {...props} multiline variant="filled" fullWidth />;
 };
 
 export default TextArea;

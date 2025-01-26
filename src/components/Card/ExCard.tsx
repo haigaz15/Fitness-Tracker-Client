@@ -11,7 +11,7 @@ const ExCard: React.FC<ExCardProps> = ({
   return (
     <Card sx={cardStyle}>
       <CardMedia {...cardMediaStyle} />
-      <CardContent {...cardContentStyle}>{cardContentLayout()}</CardContent>
+      <CardContent sx={cardContentStyle}>{cardContentLayout()}</CardContent>
       {cardEndLayout && cardEndLayout()}
     </Card>
   );

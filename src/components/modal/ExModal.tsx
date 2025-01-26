@@ -15,7 +15,7 @@ const ExModal: React.FC<ExerciseModalProps> = ({
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        {renderModalContent && renderModalContent()}
+        <>{renderModalContent && renderModalContent()}</>
       </Modal>
     </React.Fragment>
   );

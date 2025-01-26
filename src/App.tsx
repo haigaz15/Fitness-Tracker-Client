@@ -9,7 +9,7 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import WorkoutContainer from "./pages/Workout/WorkoutContainer";
 import WorkoutListItems from "./components/Workout/WorkoutListItems";
 import ProgramContainer from "./pages/Programs/ProgramContainer";
-import SignUp from "./pages/Log/SignUp";
+import LogContainer from "./pages/Log/LogContainer";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,8 +18,12 @@ function App() {
       element: <Home />,
     },
     {
-      path: "/signup",
-      element: <SignUp />,
+      path: "/sign-up",
+      element: <LogContainer />,
+    },
+    {
+      path: "/sign-in",
+      element: <LogContainer />,
     },
     {
       path: "/user-profile",

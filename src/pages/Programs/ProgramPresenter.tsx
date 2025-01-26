@@ -1,23 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { WorkoutSession } from "../../types/workout-type";
 
 interface ProgramPresenterProps {
   name: string;
   description: string;
   workouts: WorkoutSession[];
-  style: { [key: string]: string };
+  style: { [key: string]: any };
+  handleAddition: (e: React.MouseEvent) => void;
+  scrollRef: React.RefObject<HTMLDivElement>;
 }
 const ProgramPresenter: React.FC<ProgramPresenterProps> = ({
   name,
   description,
   workouts,
   style,
+  handleAddition,
+  scrollRef,
 }) => {
   return (
-    <Box sx={style}>
+    <Box sx={style.containerStyle}>
       <h1>{name}</h1>
-      <p>{description}</p>
-      <Box>
+      <Button onClick={handleAddition}>Add Program</Button>
+      <Box ref={scrollRef} sx={style.programStyle}>
         {workouts.map((workout) => (
           <Box key={workout.id}>
             <h2>{workout.name}</h2>

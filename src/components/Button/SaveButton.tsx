@@ -6,11 +6,11 @@ const SaveButton: React.FC<ButtonProps> = ({
   handleClick,
   style,
   buttonTitle,
+  ...otherProps
 }) => {
   return (
     <Button
-      variant="contained"
-      color="primary"
+      {...otherProps}
       startIcon={<SaveIcon />}
       onClick={handleClick}
       sx={style}
